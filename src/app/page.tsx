@@ -9,7 +9,20 @@ export default function Home() {
   const hero = artworks.find((a) => a.id === 'bold-circles-lines') || featured[0] || artworks[0];
   const preview = featured.filter((a) => a.id !== hero?.id).slice(0, 4);
 
-  if (!hero) return null;
+  if (!hero) {
+    return (
+      <section className="max-w-6xl mx-auto px-6 py-16 md:py-24">
+        <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+          <div className="space-y-6">
+            <div className="h-10 w-64 bg-border rounded animate-shimmer bg-gradient-to-r from-border via-card-hover to-border bg-[length:200%_100%]" />
+            <div className="h-4 w-48 bg-border rounded" />
+            <div className="h-4 w-40 bg-border rounded" />
+          </div>
+          <div className="aspect-[3/4] bg-gradient-to-r from-border via-card-hover to-border bg-[length:200%_100%] animate-shimmer" />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <>
