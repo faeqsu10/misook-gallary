@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import { INQUIRY_TYPE_LABELS, InquiryType } from '@/lib/types';
 
 export default function ContactForm() {
@@ -16,11 +18,30 @@ export default function ContactForm() {
     message: '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // For MVP, just show success message
-    setSubmitted(true);
+    setLoading(true);
+    setError('');
+
+    try {
+      await addDoc(collection(db, 'inquiries'), {
+        name: formData.name,
+        email: formData.email,
+        type: formData.type,
+        artwork: formData.artwork,
+        message: formData.message,
+        createdAt: serverTimestamp(),
+      });
+      setSubmitted(true);
+    } catch (err) {
+      console.error('Failed to submit inquiry:', err);
+      setError('문의 전송에 실패했습니다. 잠시 후 다시 시도해주세요.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -57,6 +78,7 @@ export default function ContactForm() {
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           className="w-full px-4 py-3 border border-border bg-transparent text-sm focus:outline-none focus:border-text transition-colors"
+          disabled={loading}
         />
       </div>
 
@@ -71,6 +93,7 @@ export default function ContactForm() {
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           className="w-full px-4 py-3 border border-border bg-transparent text-sm focus:outline-none focus:border-text transition-colors"
+          disabled={loading}
         />
       </div>
 
@@ -85,6 +108,7 @@ export default function ContactForm() {
             setFormData({ ...formData, type: e.target.value as InquiryType })
           }
           className="w-full px-4 py-3 border border-border bg-transparent text-sm focus:outline-none focus:border-text transition-colors"
+          disabled={loading}
         >
           {(Object.keys(INQUIRY_TYPE_LABELS) as InquiryType[]).map((key) => (
             <option key={key} value={key}>
@@ -107,6 +131,7 @@ export default function ContactForm() {
               setFormData({ ...formData, artwork: e.target.value })
             }
             className="w-full px-4 py-3 border border-border bg-transparent text-sm focus:outline-none focus:border-text transition-colors"
+            disabled={loading}
           />
         </div>
       )}
@@ -124,14 +149,20 @@ export default function ContactForm() {
             setFormData({ ...formData, message: e.target.value })
           }
           className="w-full px-4 py-3 border border-border bg-transparent text-sm focus:outline-none focus:border-text transition-colors resize-none"
+          disabled={loading}
         />
       </div>
 
+      {error && (
+        <p className="text-sm text-red-500">{error}</p>
+      )}
+
       <button
         type="submit"
-        className="px-8 py-3 border border-text text-sm tracking-wider hover:bg-text hover:text-bg transition-colors"
+        disabled={loading}
+        className="px-8 py-3 border border-text text-sm tracking-wider hover:bg-text hover:text-bg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        문의 보내기
+        {loading ? '전송 중...' : '문의 보내기'}
       </button>
     </form>
   );

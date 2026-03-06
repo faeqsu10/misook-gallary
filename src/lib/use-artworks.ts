@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Artwork } from './types';
 import { fetchArtworks } from './artworks-db';
-import { artworks as staticArtworks, featuredArtworks as staticFeatured } from '@/data/artworks';
+import { artworks as staticArtworks } from '@/data/artworks';
 
 export function useArtworks() {
   const [artworks, setArtworks] = useState<Artwork[]>(staticArtworks);

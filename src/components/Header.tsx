@@ -15,6 +15,13 @@ export default function Header() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
+  const isActive = (href: string) => {
+    if (href === '/gallery') {
+      return pathname === '/gallery' || pathname.startsWith('/works/');
+    }
+    return pathname === href;
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-[#FAFAFA]/95 backdrop-blur-sm border-b border-border">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -32,7 +39,7 @@ export default function Header() {
               key={href}
               href={href}
               className={`text-sm tracking-wider transition-opacity hover:opacity-70 ${
-                pathname === href
+                isActive(href)
                   ? 'opacity-100 font-medium'
                   : 'opacity-60'
               }`}
@@ -78,7 +85,7 @@ export default function Header() {
               href={href}
               onClick={() => setIsOpen(false)}
               className={`block px-6 py-4 text-sm tracking-wider border-b border-border transition-colors hover:bg-card-hover ${
-                pathname === href ? 'font-medium' : 'opacity-60'
+                isActive(href) ? 'font-medium' : 'opacity-60'
               }`}
             >
               {label}

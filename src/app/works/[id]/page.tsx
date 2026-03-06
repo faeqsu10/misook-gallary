@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
+
 import { useParams } from 'next/navigation';
 import { useArtwork } from '@/lib/use-artworks';
 import { STATUS_LABELS, CATEGORY_LABELS } from '@/lib/types';
