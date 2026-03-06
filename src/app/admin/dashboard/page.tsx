@@ -163,6 +163,29 @@ export default function DashboardPage() {
         <p className="text-xs text-muted mt-8 text-center">
           총 {artworks.length}점의 작품
         </p>
+
+        {/* Quick Links */}
+        <div className="mt-12 pt-8 border-t border-border flex flex-wrap gap-4 justify-center">
+          <Link
+            href="/admin/inquiries"
+            className="px-5 py-2 text-xs border border-border hover:border-text transition-colors tracking-wider"
+          >
+            문의 관리
+          </Link>
+          <Link
+            href="/admin/seed"
+            className="px-5 py-2 text-xs border border-border hover:border-text transition-colors tracking-wider"
+          >
+            초기 데이터
+          </Link>
+          <Link
+            href="/"
+            className="px-5 py-2 text-xs border border-border hover:border-text transition-colors tracking-wider"
+            target="_blank"
+          >
+            사이트 보기 &nearr;
+          </Link>
+        </div>
       </main>
     </div>
   );
