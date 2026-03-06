@@ -1,0 +1,153 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1772795950765,
+  "projectRoot": "/home/faeqsu10/projects/misook-gallery",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "react",
+        "version": "19.1.0",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.1.0",
+        "category": "frontend"
+      },
+      {
+        "name": "next",
+        "version": "15.5.12",
+        "category": "fullstack"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": null,
+    "lintCommand": "npm run lint",
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "next dev",
+      "build": "next build",
+      "start": "next start",
+      "lint": "eslint"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": "type-based"
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "public",
+      "src"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "archive": {
+      "path": "archive",
+      "purpose": null,
+      "fileCount": 23,
+      "lastAccessed": 1772795950749,
+      "keyFiles": [
+        "KakaoTalk_20260306_193645672.jpg",
+        "KakaoTalk_20260306_193645672_01.jpg",
+        "KakaoTalk_20260306_193645672_02.jpg",
+        "KakaoTalk_20260306_193645672_03.jpg",
+        "KakaoTalk_20260306_193645672_04.jpg"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 0,
+      "lastAccessed": 1772795950750,
+      "keyFiles": []
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1772795950759,
+      "keyFiles": []
+    },
+    "tasks": {
+      "path": "tasks",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1772795950760,
+      "keyFiles": [
+        "lessons.md",
+        "todo.md"
+      ]
+    },
+    "src/app": {
+      "path": "src/app",
+      "purpose": "Application code",
+      "fileCount": 4,
+      "lastAccessed": 1772795950761,
+      "keyFiles": [
+        "favicon.ico",
+        "globals.css",
+        "layout.tsx"
+      ]
+    },
+    "src/components": {
+      "path": "src/components",
+      "purpose": "UI components",
+      "fileCount": 2,
+      "lastAccessed": 1772795950761,
+      "keyFiles": [
+        "Footer.tsx",
+        "Header.tsx"
+      ]
+    },
+    "src/data": {
+      "path": "src/data",
+      "purpose": "Data files",
+      "fileCount": 2,
+      "lastAccessed": 1772795950761,
+      "keyFiles": [
+        "artist.ts",
+        "artworks.ts"
+      ]
+    },
+    "src/lib": {
+      "path": "src/lib",
+      "purpose": "Library code",
+      "fileCount": 1,
+      "lastAccessed": 1772795950763,
+      "keyFiles": [
+        "types.ts"
+      ]
+    }
+  },
+  "hotPaths": [],
+  "userDirectives": []
+}
