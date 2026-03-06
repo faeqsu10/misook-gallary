@@ -1,34 +1,35 @@
+'use client';
+
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { artworks, getArtwork, getAdjacentArtworks } from '@/data/artworks';
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
+import { useArtwork } from '@/lib/use-artworks';
 import { STATUS_LABELS, CATEGORY_LABELS } from '@/lib/types';
 import ArtworkViewer from '@/components/ArtworkViewer';
 
-export function generateStaticParams() {
-  return artworks.map((artwork) => ({ id: artwork.id }));
-}
+export default function WorkDetailPage() {
+  const params = useParams();
+  const id = params.id as string;
+  const { artwork, prev, next, loading } = useArtwork(id);
 
-export function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  return params.then(({ id }) => {
-    const artwork = getArtwork(id);
-    if (!artwork) return { title: '작품을 찾을 수 없습니다' };
-    return {
-      title: `${artwork.title} — 정미숙`,
-      description: artwork.description || `정미숙 작가의 작품 "${artwork.title}"`,
-    };
-  });
-}
+  if (loading) {
+    return (
+      <section className="max-w-6xl mx-auto px-6 py-16">
+        <p className="text-center text-muted py-20">작품을 불러오는 중...</p>
+      </section>
+    );
+  }
 
-export default async function WorkDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const artwork = getArtwork(id);
-  if (!artwork) notFound();
-
-  const { prev, next } = getAdjacentArtworks(id);
+  if (!artwork) {
+    return (
+      <section className="max-w-6xl mx-auto px-6 py-16 text-center">
+        <h1 className="font-serif text-2xl mb-4">작품을 찾을 수 없습니다</h1>
+        <Link href="/gallery" className="text-sm text-muted hover:text-text transition-colors">
+          갤러리로 돌아가기
+        </Link>
+      </section>
+    );
+  }
 
   return (
     <section className="max-w-6xl mx-auto px-6 py-16">

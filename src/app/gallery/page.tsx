@@ -1,12 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { artworks } from '@/data/artworks';
 import { CategoryFilter, StatusFilter } from '@/lib/types';
+import { useArtworks } from '@/lib/use-artworks';
 import ArtworkCard from '@/components/ArtworkCard';
 import FilterBar from '@/components/FilterBar';
 
 export default function GalleryPage() {
+  const { artworks, loading } = useArtworks();
   const [category, setCategory] = useState<CategoryFilter>('all');
   const [status, setStatus] = useState<StatusFilter>('all');
 
@@ -30,7 +31,9 @@ export default function GalleryPage() {
         onStatusChange={setStatus}
       />
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <p className="text-center text-sm text-muted py-20">작품을 불러오는 중...</p>
+      ) : filtered.length === 0 ? (
         <p className="text-center text-sm text-muted py-20">
           해당 조건의 작품이 없습니다.
         </p>

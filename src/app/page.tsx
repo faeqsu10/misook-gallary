@@ -1,10 +1,15 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { featuredArtworks, artworks } from '@/data/artworks';
+import { useArtworks } from '@/lib/use-artworks';
 
 export default function Home() {
-  const hero = artworks.find((a) => a.id === 'bold-circles-lines') || featuredArtworks[0];
-  const preview = featuredArtworks.filter((a) => a.id !== hero.id).slice(0, 4);
+  const { artworks, featured } = useArtworks();
+  const hero = artworks.find((a) => a.id === 'bold-circles-lines') || featured[0] || artworks[0];
+  const preview = featured.filter((a) => a.id !== hero?.id).slice(0, 4);
+
+  if (!hero) return null;
 
   return (
     <>
@@ -32,14 +37,19 @@ export default function Home() {
           <div className="fade-in delay-200">
             <Link href={`/works/${hero.id}`}>
               <div className="relative aspect-[3/4] overflow-hidden">
-                <Image
-                  src={hero.image}
-                  alt={hero.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
-                  priority
-                />
+                {hero.image.startsWith('http') ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={hero.image} alt={hero.title} className="w-full h-full object-cover" />
+                ) : (
+                  <Image
+                    src={hero.image}
+                    alt={hero.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                    priority
+                  />
+                )}
               </div>
               <p className="mt-3 font-serif text-sm text-muted">
                 {hero.title}
@@ -68,13 +78,18 @@ export default function Home() {
               className={`group block fade-in-up delay-${(i + 1) * 100}`}
             >
               <div className="relative aspect-[3/4] overflow-hidden bg-border">
-                <Image
-                  src={artwork.image}
-                  alt={artwork.title}
-                  fill
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+                {artwork.image.startsWith('http') ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={artwork.image} alt={artwork.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                ) : (
+                  <Image
+                    src={artwork.image}
+                    alt={artwork.title}
+                    fill
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                )}
               </div>
               <p className="mt-3 font-serif text-sm">{artwork.title}</p>
             </Link>
