@@ -26,18 +26,6 @@ export const artworks: Artwork[] = [
     order: 2,
   },
   {
-    id: 'prayer-diary',
-    title: '기도하는 날',
-    titleEn: 'A Day of Prayer',
-    year: '2026',
-    medium: '펜',
-    category: 'drawing',
-    status: 'collection',
-    description: '십자가를 안은 사람. 일기장 위에 그려진 기도의 순간.',
-    image: '/artworks/prayer-diary.jpg',
-    order: 3,
-  },
-  {
     id: 'woman-under-tree',
     title: '나무 아래 여인',
     titleEn: 'Woman Under the Tree',
@@ -47,7 +35,7 @@ export const artworks: Artwork[] = [
     status: 'exhibit',
     description: '벤치에 앉아 고요히 생각에 잠긴 여인. 나뭇가지 사이로 새가 내려다본다.',
     image: '/artworks/woman-under-tree.jpg',
-    order: 4,
+    order: 3,
   },
   {
     id: 'prayer-cross',
@@ -59,7 +47,7 @@ export const artworks: Artwork[] = [
     status: 'collection',
     description: '십자가를 꼭 안은 채 기도하는 모습. 간절함이 선 하나하나에 담겨 있다.',
     image: '/artworks/prayer-cross.jpg',
-    order: 5,
+    order: 4,
   },
   {
     id: 'geometric-lines',
@@ -70,7 +58,7 @@ export const artworks: Artwork[] = [
     status: 'inquiry',
     description: '날카로운 직선들이 원과 삼각형 사이에서 긴장감을 만들어낸다.',
     image: '/artworks/geometric-lines.jpg',
-    order: 6,
+    order: 5,
   },
   {
     id: 'spiral-vortex',
@@ -82,7 +70,7 @@ export const artworks: Artwork[] = [
     status: 'exhibit',
     description: '나선형 곡선이 삼각형과 직선 속에서 회전하며, 안쪽으로 빨려드는 에너지를 담았다.',
     image: '/artworks/spiral-vortex.jpg',
-    order: 7,
+    order: 6,
   },
   {
     id: 'abstract-triangles',
@@ -93,18 +81,7 @@ export const artworks: Artwork[] = [
     status: 'inquiry',
     description: '검은 선과 원색의 삼각형들이 격렬하게 부딪히며 역동적인 구성을 만든다.',
     image: '/artworks/abstract-triangles.jpg',
-    order: 8,
-  },
-  {
-    id: 'witch-framed',
-    title: '마녀 (액자)',
-    titleEn: 'Witch (Framed)',
-    medium: '마커, 색연필',
-    category: 'portrait',
-    status: 'collection',
-    description: '액자에 담긴 마녀. 같은 시선이 나무 프레임 안에서 더욱 강렬하게 빛난다.',
-    image: '/artworks/witch-framed.jpg',
-    order: 10,
+    order: 7,
   },
   {
     id: 'color-eye-spiral',
@@ -115,7 +92,7 @@ export const artworks: Artwork[] = [
     status: 'inquiry',
     description: '굵은 곡선이 화면 중앙의 눈을 감싸며 회전한다. 색과 형태가 시선을 끌어당긴다.',
     image: '/artworks/color-eye-spiral.jpg',
-    order: 11,
+    order: 8,
   },
   {
     id: 'madonna-rosary',
@@ -127,7 +104,7 @@ export const artworks: Artwork[] = [
     status: 'exhibit',
     description: '묵주를 쥐고 기도하는 성모의 모습. 섬세한 연필 터치로 경건함을 담았다.',
     image: '/artworks/madonna-rosary.jpg',
-    order: 12,
+    order: 9,
   },
   {
     id: 'fierce-gaze',
@@ -139,7 +116,7 @@ export const artworks: Artwork[] = [
     description: '두 눈이 화면을 관통한다. 톱니 같은 검은 선 사이로 초록과 빨강이 번진다.',
     image: '/artworks/fierce-gaze.jpg',
     featured: true,
-    order: 13,
+    order: 10,
   },
   {
     id: 'abstract-red-green',
@@ -150,7 +127,7 @@ export const artworks: Artwork[] = [
     status: 'exhibit',
     description: '굵은 곡선이 붉은색과 초록색 면을 감싸며 긴장과 이완을 동시에 보여준다.',
     image: '/artworks/abstract-red-green.jpg',
-    order: 14,
+    order: 11,
   },
   {
     id: 'charcoal-red-cross',
@@ -161,7 +138,7 @@ export const artworks: Artwork[] = [
     status: 'exhibit',
     description: '목탄의 거친 질감 위에 붉은 색연필이 교차하며 깊이감을 만든다.',
     image: '/artworks/charcoal-red-cross.jpg',
-    order: 15,
+    order: 12,
   },
   {
     id: 'bold-circles-lines',
@@ -173,7 +150,7 @@ export const artworks: Artwork[] = [
     description: '굵은 원과 날카로운 직선이 대비를 이루며, 빨강·파랑·초록 원색이 리듬을 만든다.',
     image: '/artworks/bold-circles-lines.jpg',
     featured: true,
-    order: 16,
+    order: 13,
   },
   {
     id: 'color-mosaic',
@@ -184,7 +161,7 @@ export const artworks: Artwork[] = [
     status: 'inquiry',
     description: '삼각형과 사각형이 쌓여 올라가며 건축적 구조를 만든다. 원색들이 각 면을 채운다.',
     image: '/artworks/color-mosaic.jpg',
-    order: 17,
+    order: 14,
   },
   {
     id: 'vivid-triangles',
@@ -195,7 +172,7 @@ export const artworks: Artwork[] = [
     status: 'inquiry',
     description: '마젠타, 파랑, 초록, 노랑 — 강렬한 색면들이 검은 선의 틀 안에서 춤을 춘다.',
     image: '/artworks/vivid-triangles.jpg',
-    order: 18,
+    order: 15,
   },
   {
     id: 'bird-in-geometry',
@@ -206,7 +183,7 @@ export const artworks: Artwork[] = [
     status: 'exhibit',
     description: '직선과 삼각형 사이에 숨어 있는 새의 형상. 노랑과 하늘색이 날개를 암시한다.',
     image: '/artworks/bird-in-geometry.jpg',
-    order: 19,
+    order: 16,
   },
   {
     id: 'blue-energy',
@@ -218,7 +195,7 @@ export const artworks: Artwork[] = [
     status: 'inquiry',
     description: '파란색 선이 에너지처럼 화면을 관통한다. 초록과 빨강이 폭발적인 대비를 이룬다.',
     image: '/artworks/blue-energy.jpg',
-    order: 20,
+    order: 17,
   },
   {
     id: 'free-composition',
@@ -229,7 +206,7 @@ export const artworks: Artwork[] = [
     status: 'exhibit',
     description: '검은 곡선이 자유롭게 흐르고, 초록·분홍·노랑의 유기적 면들이 공간을 채운다.',
     image: '/artworks/free-composition.jpg',
-    order: 21,
+    order: 18,
   },
   {
     id: 'tension-and-calm',
@@ -240,7 +217,7 @@ export const artworks: Artwork[] = [
     status: 'inquiry',
     description: '날카로운 선과 부드러운 곡선, 차가운 청록과 따뜻한 노랑이 공존하는 화면.',
     image: '/artworks/tension-and-calm.jpg',
-    order: 22,
+    order: 19,
   },
   {
     id: 'golden-orbit',
@@ -251,7 +228,7 @@ export const artworks: Artwork[] = [
     status: 'inquiry',
     description: '큰 원이 화면을 지배하고, 그 안에서 황금빛과 붉은 선이 궤도를 그린다.',
     image: '/artworks/golden-orbit.jpg',
-    order: 23,
+    order: 20,
   },
 ];
 
