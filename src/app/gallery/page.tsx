@@ -42,8 +42,14 @@ export default function GalleryPage() {
         </p>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-          {filtered.map((artwork) => (
-            <ArtworkCard key={artwork.id} artwork={artwork} />
+          {filtered.map((artwork, i) => (
+            <div
+              key={artwork.id}
+              className="fade-in-up"
+              style={{ animationDelay: `${Math.min(i * 50, 300)}ms` }}
+            >
+              <ArtworkCard artwork={artwork} />
+            </div>
           ))}
         </div>
       )}
