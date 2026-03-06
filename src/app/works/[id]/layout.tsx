@@ -5,7 +5,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const artwork = getArtwork(id);
   if (!artwork) return { title: '작품을 찾을 수 없습니다' };
   return {
-    title: `${artwork.title} — 정미숙`,
+    title: artwork.title,
     description: artwork.description || `정미숙 작가의 작품 "${artwork.title}"`,
   };
 }

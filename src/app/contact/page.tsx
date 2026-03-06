@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import ContactForm from '@/components/ContactForm';
 
 export const metadata: Metadata = {
-  title: '문의 — 정미숙',
+  title: '문의',
   description: '작품이 마음에 닿았다면 조용히 문의를 남겨주세요.',
 };
 
