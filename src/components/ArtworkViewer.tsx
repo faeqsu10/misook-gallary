@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ArtworkViewer({
   src,
@@ -12,6 +12,24 @@ export default function ArtworkViewer({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const isExternal = src.startsWith('http');
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Lock body scroll when modal is open
+    document.body.style.overflow = 'hidden';
+
+    // ESC key handler to close modal
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
 
   return (
     <>
@@ -41,7 +59,7 @@ export default function ArtworkViewer({
       {/* Fullscreen modal */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center cursor-zoom-out"
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center cursor-zoom-out fade-in-scale"
           onClick={() => setIsOpen(false)}
           role="dialog"
           aria-label="작품 확대 뷰"

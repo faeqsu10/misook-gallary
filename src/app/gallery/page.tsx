@@ -5,6 +5,7 @@ import { CategoryFilter, StatusFilter } from '@/lib/types';
 import { useArtworks } from '@/lib/use-artworks';
 import ArtworkCard from '@/components/ArtworkCard';
 import FilterBar from '@/components/FilterBar';
+import { SkeletonGrid } from '@/components/Skeleton';
 
 export default function GalleryPage() {
   const { artworks, loading } = useArtworks();
@@ -21,7 +22,9 @@ export default function GalleryPage() {
     <section className="max-w-6xl mx-auto px-6 py-16">
       <h1 className="font-serif text-2xl md:text-3xl mb-2">Gallery</h1>
       <p className="text-sm text-muted mb-10">
-        {artworks.length}점의 작품을 감상하세요.
+        {category === 'all' && status === 'all'
+          ? `${artworks.length}점의 작품을 감상하세요.`
+          : `${filtered.length}점의 작품이 선택되었습니다.`}
       </p>
 
       <FilterBar
@@ -32,7 +35,7 @@ export default function GalleryPage() {
       />
 
       {loading ? (
-        <p className="text-center text-sm text-muted py-20">작품을 불러오는 중...</p>
+        <SkeletonGrid count={6} />
       ) : filtered.length === 0 ? (
         <p className="text-center text-sm text-muted py-20">
           해당 조건의 작품이 없습니다.

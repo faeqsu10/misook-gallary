@@ -13,7 +13,7 @@ export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    type: 'support' as InquiryType,
+    type: (artworkTitle ? 'purchase' : 'support') as InquiryType,
     artwork: artworkTitle,
     message: '',
   });

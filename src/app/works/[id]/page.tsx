@@ -15,7 +15,21 @@ export default function WorkDetailPage() {
   if (loading) {
     return (
       <section className="max-w-6xl mx-auto px-6 py-16">
-        <p className="text-center text-muted py-20">작품을 불러오는 중...</p>
+        <div className="grid md:grid-cols-[1fr_380px] gap-12 md:gap-16">
+          <div className="aspect-[3/4] bg-gradient-to-r from-border via-card-hover to-border bg-[length:200%_100%] animate-shimmer" />
+          <div className="space-y-4">
+            <div className="h-8 w-48 bg-border rounded" />
+            <div className="h-4 w-32 bg-border rounded" />
+            <div className="border-t border-border pt-6 space-y-3">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="flex justify-between">
+                  <div className="h-4 w-16 bg-border rounded" />
+                  <div className="h-4 w-24 bg-border rounded" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </section>
     );
   }
@@ -33,6 +47,12 @@ export default function WorkDetailPage() {
 
   return (
     <section className="max-w-6xl mx-auto px-6 py-16">
+      <Link
+        href="/gallery"
+        className="inline-block text-xs text-muted tracking-wider hover:text-text transition-colors mb-8"
+      >
+        &larr; 갤러리
+      </Link>
       <div className="grid md:grid-cols-[1fr_380px] gap-12 md:gap-16">
         {/* Image */}
         <div className="fade-in">
