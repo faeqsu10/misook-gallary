@@ -5,7 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { fetchArtwork, updateArtwork, uploadImage } from '@/lib/artworks-db';
 import { Artwork } from '@/lib/types';
-import Link from 'next/link';
+import AdminShell from '@/components/AdminShell';
 
 const CATEGORIES = [
   { value: 'portrait', label: '인물' },
@@ -20,7 +20,7 @@ const STATUSES = [
 ] as const;
 
 export default function EditPage() {
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const params = useParams();
   const artworkId = params.id as string;
@@ -41,10 +41,6 @@ export default function EditPage() {
   const [preview, setPreview] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    if (!authLoading && !user) router.push('/admin');
-  }, [user, authLoading, router]);
 
   useEffect(() => {
     if (user && artworkId) {
@@ -124,25 +120,18 @@ export default function EditPage() {
     }
   }
 
-  if (authLoading || !user || fetching) {
+  if (fetching) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted">로딩 중...</p>
-      </div>
+      <AdminShell title="작품 수정">
+        <div className="flex items-center justify-center py-20">
+          <p className="text-muted">작품을 불러오는 중...</p>
+        </div>
+      </AdminShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-bg">
-      <header className="sticky top-0 z-50 bg-bg/95 backdrop-blur-sm border-b border-border">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center gap-4">
-          <Link href="/admin/dashboard" className="text-muted hover:text-text transition-colors text-sm">
-            ← 돌아가기
-          </Link>
-          <h1 className="font-serif text-lg">작품 수정</h1>
-        </div>
-      </header>
-
+    <AdminShell title="작품 수정">
       <main className="max-w-2xl mx-auto px-6 py-10">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Image */}
@@ -225,6 +214,6 @@ export default function EditPage() {
           </button>
         </form>
       </main>
-    </div>
+    </AdminShell>
   );
 }

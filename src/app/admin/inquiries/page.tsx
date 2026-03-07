@@ -1,12 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { collection, getDocs, deleteDoc, doc, orderBy, query } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import Link from 'next/link';
 import { INQUIRY_TYPE_LABELS, InquiryType } from '@/lib/types';
+import AdminShell from '@/components/AdminShell';
 
 interface Inquiry {
   id: string;
@@ -19,15 +18,10 @@ interface Inquiry {
 }
 
 export default function InquiriesPage() {
-  const { user, loading } = useAuth();
-  const router = useRouter();
+  const { user } = useAuth();
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [fetching, setFetching] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!loading && !user) router.push('/admin');
-  }, [user, loading, router]);
 
   useEffect(() => {
     if (user) loadInquiries();
@@ -67,25 +61,8 @@ export default function InquiriesPage() {
     });
   }
 
-  if (loading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted">로딩 중...</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-bg">
-      <header className="sticky top-0 z-50 bg-bg/95 backdrop-blur-sm border-b border-border">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center gap-4">
-          <Link href="/admin/dashboard" className="text-muted hover:text-text transition-colors text-sm">
-            &larr; 대시보드
-          </Link>
-          <h1 className="font-serif text-lg">문의 관리</h1>
-        </div>
-      </header>
-
+    <AdminShell title="문의 관리">
       <main className="max-w-4xl mx-auto px-6 py-10">
         {fetching ? (
           <p className="text-muted text-center py-20">문의를 불러오는 중...</p>
@@ -130,6 +107,6 @@ export default function InquiriesPage() {
           총 {inquiries.length}건의 문의
         </p>
       </main>
-    </div>
+    </AdminShell>
   );
 }

@@ -36,7 +36,10 @@ export default function AdminLoginPage() {
     setError('');
     setSubmitting(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      // Set session cookie for middleware
+      const token = await result.user.getIdToken();
+      document.cookie = `__session=${token}; path=/; max-age=3600; SameSite=Strict`;
       router.push('/admin/dashboard');
     } catch {
       setError('이메일 또는 비밀번호가 올바르지 않습니다.');

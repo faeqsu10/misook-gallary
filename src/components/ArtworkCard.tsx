@@ -3,31 +3,19 @@ import Link from 'next/link';
 import { Artwork, STATUS_LABELS } from '@/lib/types';
 
 export default function ArtworkCard({ artwork }: { artwork: Artwork }) {
-  const isExternal = artwork.image.startsWith('http');
-
   return (
     <Link
       href={`/works/${artwork.id}`}
       className="group block"
     >
       <div className="relative aspect-[3/4] overflow-hidden bg-border">
-        {isExternal ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={artwork.image}
-            alt={artwork.title}
-            loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <Image
-            src={artwork.image}
-            alt={artwork.title}
-            fill
-            sizes="(max-width: 768px) 50vw, 33vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        )}
+        <Image
+          src={artwork.image}
+          alt={artwork.title}
+          fill
+          sizes="(max-width: 768px) 50vw, 33vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+        />
       </div>
       <div className="mt-3 space-y-1">
         <h3 className="font-serif text-sm">{artwork.title}</h3>

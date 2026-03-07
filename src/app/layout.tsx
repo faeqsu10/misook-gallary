@@ -30,6 +30,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'ko_KR',
     siteName: `${artist.name} 갤러리`,
+    images: [{ url: `${SITE_URL}/og-default.png`, alt: '정미숙 갤러리' }],
   },
 };
 

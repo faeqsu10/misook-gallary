@@ -13,7 +13,6 @@ export default function ArtworkViewer({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const isExternal = src.startsWith('http');
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -71,18 +70,13 @@ export default function ArtworkViewer({
             &times;
           </button>
           <div className="relative w-[90vw] h-[90vh]">
-            {isExternal ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={src} alt={alt} className="w-full h-full object-contain" />
-            ) : (
-              <Image
-                src={src}
-                alt={alt}
-                fill
-                sizes="90vw"
-                className="object-contain"
-              />
-            )}
+            <Image
+              src={src}
+              alt={alt}
+              fill
+              sizes="90vw"
+              className="object-contain"
+            />
           </div>
         </div>,
         document.body
@@ -99,19 +93,14 @@ export default function ArtworkViewer({
         aria-label="작품 확대 보기"
         onKeyDown={(e) => e.key === 'Enter' && setIsOpen(true)}
       >
-        {isExternal ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={src} alt={alt} className="w-full h-full object-contain" />
-        ) : (
-          <Image
-            src={src}
-            alt={alt}
-            fill
-            sizes="(max-width: 768px) 100vw, 60vw"
-            className="object-contain"
-            priority
-          />
-        )}
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes="(max-width: 768px) 100vw, 60vw"
+          className="object-contain"
+          priority
+        />
       </div>
       {modal}
     </>

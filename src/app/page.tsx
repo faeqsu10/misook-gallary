@@ -51,19 +51,14 @@ export default function Home() {
           <div className="fade-in delay-200">
             <Link href={`/works/${hero.id}`}>
               <div className="relative aspect-[3/4] overflow-hidden">
-                {hero.image.startsWith('http') ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={hero.image} alt={hero.title} loading="eager" className="w-full h-full object-cover" />
-                ) : (
-                  <Image
-                    src={hero.image}
-                    alt={hero.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover"
-                    priority
-                  />
-                )}
+                <Image
+                  src={hero.image}
+                  alt={hero.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover"
+                  priority
+                />
               </div>
               <p className="mt-3 font-serif text-sm text-muted">
                 {hero.title}
@@ -93,18 +88,13 @@ export default function Home() {
               style={{ animationDelay: `${(i + 1) * 100}ms` }}
             >
               <div className="relative aspect-[3/4] overflow-hidden bg-border">
-                {artwork.image.startsWith('http') ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={artwork.image} alt={artwork.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                ) : (
-                  <Image
-                    src={artwork.image}
-                    alt={artwork.title}
-                    fill
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                )}
+                <Image
+                  src={artwork.image}
+                  alt={artwork.title}
+                  fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
               </div>
               <p className="mt-3 font-serif text-sm">{artwork.title}</p>
             </Link>

@@ -57,6 +57,7 @@ export default function DashboardPage() {
 
   async function handleLogout() {
     await signOut(auth);
+    document.cookie = '__session=; path=/; max-age=0';
     router.push('/admin');
   }
 

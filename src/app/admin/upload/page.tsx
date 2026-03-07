@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/lib/auth-context';
 import { uploadImage, createArtwork } from '@/lib/artworks-db';
 import { Artwork } from '@/lib/types';
-import Link from 'next/link';
+import AdminShell from '@/components/AdminShell';
 
 const CATEGORIES = [
   { value: 'portrait', label: '인물' },
@@ -20,7 +19,6 @@ const STATUSES = [
 ] as const;
 
 export default function UploadPage() {
-  const { user, loading } = useAuth();
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -37,10 +35,6 @@ export default function UploadPage() {
   const [preview, setPreview] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    if (!loading && !user) router.push('/admin');
-  }, [user, loading, router]);
 
   function validateFile(f: File): string | null {
     const MAX_SIZE = 10 * 1024 * 1024;
@@ -112,25 +106,8 @@ export default function UploadPage() {
     }
   }
 
-  if (loading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted">로딩 중...</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-bg">
-      <header className="sticky top-0 z-50 bg-bg/95 backdrop-blur-sm border-b border-border">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center gap-4">
-          <Link href="/admin/dashboard" className="text-muted hover:text-text transition-colors text-sm">
-            ← 돌아가기
-          </Link>
-          <h1 className="font-serif text-lg">새 작품 등록</h1>
-        </div>
-      </header>
-
+    <AdminShell title="새 작품 등록">
       <main className="max-w-2xl mx-auto px-6 py-10">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Image Upload */}
@@ -284,6 +261,6 @@ export default function UploadPage() {
           </button>
         </form>
       </main>
-    </div>
+    </AdminShell>
   );
 }
