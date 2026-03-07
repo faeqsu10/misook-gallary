@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 export default function ArtworkViewer({
@@ -14,6 +14,8 @@ export default function ArtworkViewer({
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const isExternal = src.startsWith('http');
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -29,15 +31,28 @@ export default function ArtworkViewer({
     };
     document.addEventListener('keydown', handleKeyDown);
 
+    const prevFocus = document.activeElement as HTMLElement;
+    requestAnimationFrame(() => closeBtnRef.current?.focus());
+
+    const trapFocus = (e: FocusEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        closeBtnRef.current?.focus();
+      }
+    };
+    document.addEventListener('focusin', trapFocus);
+
     return () => {
       document.body.style.overflow = '';
       document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('focusin', trapFocus);
+      prevFocus?.focus();
     };
   }, [isOpen]);
 
   const modal = isOpen && mounted
     ? createPortal(
         <div
+          ref={modalRef}
           className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center cursor-zoom-out fade-in-scale"
           onClick={() => setIsOpen(false)}
           role="dialog"
@@ -45,6 +60,7 @@ export default function ArtworkViewer({
           aria-label="작품 확대 뷰"
         >
           <button
+            ref={closeBtnRef}
             onClick={(e) => {
               e.stopPropagation();
               setIsOpen(false);

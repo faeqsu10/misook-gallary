@@ -39,15 +39,30 @@ export default function SeedPage() {
     setStatus('seeding');
     setMessage('');
     try {
-      let count = 0;
+      // Fetch existing artwork IDs to prevent duplicates
+      const snapshot = await getDocs(collection(db, 'artworks'));
+      const existingIds = new Set<string>();
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.id) existingIds.add(data.id);
+      });
+
+      let added = 0;
+      let skipped = 0;
       for (const artwork of staticArtworks) {
-        await addDoc(collection(db, 'artworks'), {
-          ...artwork,
-        });
-        count++;
-        setMessage(`${count}/${staticArtworks.length} 작품 등록 중...`);
+        if (existingIds.has(artwork.id)) {
+          skipped++;
+          continue;
+        }
+        await addDoc(collection(db, 'artworks'), { ...artwork });
+        added++;
+        setMessage(`${added + skipped}/${staticArtworks.length} 처리 중...`);
       }
-      setMessage(`${count}개 작품을 Firestore에 등록했습니다.`);
+      setMessage(
+        skipped > 0
+          ? `${added}개 등록, ${skipped}개 중복 건너뜀`
+          : `${added}개 작품을 Firestore에 등록했습니다.`
+      );
       setStatus('done');
     } catch (err) {
       console.error('Seed failed:', err);
@@ -93,8 +108,8 @@ export default function SeedPage() {
           )}
 
           {existing > 0 && status === 'idle' && (
-            <p className="text-xs text-orange-500">
-              이미 {existing}개의 작품이 있습니다. 중복 등록될 수 있습니다.
+            <p className="text-xs text-muted">
+              이미 {existing}개의 작품이 있습니다. 중복 항목은 자동으로 건너뜁니다.
             </p>
           )}
 

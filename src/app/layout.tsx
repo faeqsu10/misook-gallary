@@ -39,6 +39,22 @@ export default function RootLayout({
   return (
     <html lang="ko" className={notoSerifKR.variable}>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: '정미숙 갤러리',
+              url: 'https://misook-gallery.vercel.app',
+              description: '오래 품어온 선과 형태를 다시 세상에 놓습니다. 정미숙 작가의 개인 미술관.',
+              author: {
+                '@type': 'Person',
+                name: '정미숙',
+              },
+            }),
+          }}
+        />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link
           rel="stylesheet"

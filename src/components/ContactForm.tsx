@@ -16,6 +16,7 @@ export default function ContactForm() {
     type: (artworkTitle ? 'purchase' : 'support') as InquiryType,
     artwork: artworkTitle,
     message: '',
+    honeypot: '',
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -25,6 +26,8 @@ export default function ContactForm() {
     e.preventDefault();
     setLoading(true);
     setError('');
+
+    if (formData.honeypot) { setSubmitted(true); return; }
 
     try {
       await addDoc(collection(db, 'inquiries'), {
@@ -55,7 +58,7 @@ export default function ContactForm() {
         <button
           onClick={() => {
             setSubmitted(false);
-            setFormData({ name: '', email: '', type: 'support', artwork: '', message: '' });
+            setFormData({ name: '', email: '', type: 'support', artwork: '', message: '', honeypot: '' });
           }}
           className="mt-8 text-sm text-muted underline underline-offset-4 hover:text-text"
         >
@@ -152,6 +155,17 @@ export default function ContactForm() {
           disabled={loading}
         />
       </div>
+
+      <input
+        type="text"
+        name="website"
+        value={formData.honeypot}
+        onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+        aria-hidden="true"
+        tabIndex={-1}
+        className="absolute -left-[9999px]"
+        autoComplete="off"
+      />
 
       {error && (
         <p className="text-sm text-red-500">{error}</p>

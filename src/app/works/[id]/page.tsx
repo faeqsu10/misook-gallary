@@ -45,8 +45,31 @@ export default function WorkDetailPage() {
     );
   }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'VisualArtwork',
+    name: artwork.title,
+    ...(artwork.titleEn && { alternateName: artwork.titleEn }),
+    ...(artwork.description && { description: artwork.description }),
+    ...(artwork.year && { dateCreated: artwork.year }),
+    ...(artwork.medium && { artMedium: artwork.medium }),
+    ...(artwork.dimensions && { size: artwork.dimensions }),
+    image: artwork.image.startsWith('http')
+      ? artwork.image
+      : `https://misook-gallery.vercel.app${artwork.image}`,
+    artist: {
+      '@type': 'Person',
+      name: '정미숙',
+    },
+    url: `https://misook-gallery.vercel.app/works/${artwork.id}`,
+  };
+
   return (
     <section className="max-w-6xl mx-auto px-6 py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Link
         href="/gallery"
         className="inline-block text-sm py-2 text-muted tracking-wider hover:text-text transition-colors mb-8"
