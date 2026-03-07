@@ -1,7 +1,8 @@
 import type { MetadataRoute } from 'next';
 import { artworks } from '@/data/artworks';
+import { SITE_URL } from '@/lib/constants';
 
-const BASE_URL = 'https://misook-gallery.vercel.app';
+const BASE_URL = SITE_URL;
 const LAST_UPDATED = new Date('2026-03-08');
 
 export default function sitemap(): MetadataRoute.Sitemap {

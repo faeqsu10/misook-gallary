@@ -1,4 +1,5 @@
 import { getArtwork } from '@/data/artworks';
+import { artist } from '@/data/artist';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -6,7 +7,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!artwork) return { title: '작품을 찾을 수 없습니다' };
   return {
     title: artwork.title,
-    description: artwork.description || `정미숙 작가의 작품 "${artwork.title}"`,
+    description: artwork.description || `${artist.name} 작가의 작품 "${artwork.title}"`,
   };
 }
 

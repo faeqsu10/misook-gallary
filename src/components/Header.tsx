@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { artist } from '@/data/artist';
 
 const NAV_ITEMS = [
   { href: '/', label: 'Home' },
@@ -23,13 +24,13 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-[#FAFAFA]/95 backdrop-blur-sm border-b border-border">
+    <header className="sticky top-0 z-50 bg-bg/95 backdrop-blur-sm border-b border-border">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link
           href="/"
           className="font-serif text-xl tracking-wide hover:opacity-70 transition-opacity"
         >
-          정미숙
+          {artist.name}
         </Link>
 
         {/* Desktop nav */}

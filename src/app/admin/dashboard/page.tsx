@@ -8,6 +8,7 @@ import { useAuth } from '@/lib/auth-context';
 import { fetchArtworks, deleteArtwork } from '@/lib/artworks-db';
 import { Artwork } from '@/lib/types';
 import Link from 'next/link';
+import { artist } from '@/data/artist';
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -70,11 +71,11 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-bg">
       {/* Admin Header */}
-      <header className="sticky top-0 z-50 bg-[#FAFAFA]/95 backdrop-blur-sm border-b border-border">
+      <header className="sticky top-0 z-50 bg-bg/95 backdrop-blur-sm border-b border-border">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/" className="font-serif text-xl tracking-wide hover:opacity-70 transition-opacity">
-              정미숙
+              {artist.name}
             </Link>
             <span className="text-xs text-muted border border-border px-2 py-0.5">관리자</span>
           </div>

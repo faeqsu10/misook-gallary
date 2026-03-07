@@ -6,6 +6,8 @@ import { useParams } from 'next/navigation';
 import { useArtwork } from '@/lib/use-artworks';
 import { STATUS_LABELS, CATEGORY_LABELS } from '@/lib/types';
 import ArtworkViewer from '@/components/ArtworkViewer';
+import { SITE_URL } from '@/lib/constants';
+import { artist } from '@/data/artist';
 
 export default function WorkDetailPage() {
   const params = useParams();
@@ -56,12 +58,12 @@ export default function WorkDetailPage() {
     ...(artwork.dimensions && { size: artwork.dimensions }),
     image: artwork.image.startsWith('http')
       ? artwork.image
-      : `https://misook-gallery.vercel.app${artwork.image}`,
+      : `${SITE_URL}${artwork.image}`,
     artist: {
       '@type': 'Person',
-      name: '정미숙',
+      name: artist.name,
     },
-    url: `https://misook-gallery.vercel.app/works/${artwork.id}`,
+    url: `${SITE_URL}/works/${artwork.id}`,
   };
 
   return (

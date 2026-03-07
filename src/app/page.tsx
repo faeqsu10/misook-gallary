@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useArtworks } from '@/lib/use-artworks';
+import { artist } from '@/data/artist';
 
 export default function Home() {
   const { artworks, featured } = useArtworks();
@@ -38,7 +39,7 @@ export default function Home() {
             <p className="text-base text-muted leading-relaxed mb-8 max-w-md">
               지금도 여전히, 그리고 다시, 그리는 사람.
               <br />
-              정미숙의 작품 세계를 만나보세요.
+              {artist.name}의 작품 세계를 만나보세요.
             </p>
             <Link
               href="/gallery"
