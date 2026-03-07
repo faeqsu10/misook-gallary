@@ -17,19 +17,21 @@ export default function AdminLoginPage() {
 
   useEffect(() => {
     if (user && !loading) {
-      router.push('/admin/dashboard');
+      // 기존 세션이 있으면 쿠키 설정 후 리다이렉트
+      user.getIdToken().then((token) => {
+        document.cookie = `__session=${token}; path=/; max-age=3600; SameSite=Strict`;
+        router.push('/admin/dashboard');
+      });
     }
   }, [user, loading, router]);
 
-  if (loading) {
+  if (loading || user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p className="text-muted">로딩 중...</p>
       </div>
     );
   }
-
-  if (user) return null;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
