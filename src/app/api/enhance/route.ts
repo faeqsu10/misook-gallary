@@ -44,7 +44,6 @@ export async function POST(request: NextRequest) {
       ],
       generationConfig: {
         responseModalities: ['IMAGE', 'TEXT'],
-        responseMimeType: 'image/jpeg',
       },
     };
 

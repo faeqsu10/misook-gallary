@@ -239,56 +239,44 @@ export default function EnhancePage() {
           </div>
         )}
 
-        {/* Artwork List */}
+        {/* Artwork Grid */}
         {fetching ? (
           <p className="text-muted text-center py-20">작품을 불러오는 중...</p>
         ) : (
-          <div className="space-y-3">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
             {artworks.map((artwork) => (
               <div
                 key={artwork.id}
-                className="flex items-center gap-4 p-4 border border-border"
+                className="border border-border p-2 space-y-2"
               >
-                <div className="w-16 h-16 flex-shrink-0 bg-gray-100 overflow-hidden relative">
+                <div className="relative aspect-square bg-gray-100 overflow-hidden">
                   <Image
                     src={artwork.useEnhanced && artwork.enhancedImage ? artwork.enhancedImage : artwork.image}
                     alt={artwork.title}
                     fill
                     className="object-cover"
-                    sizes="64px"
+                    sizes="(max-width: 640px) 33vw, (max-width: 768px) 25vw, 16vw"
                   />
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-medium text-sm truncate">{artwork.title}</h3>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    {artwork.enhancedImage ? (
-                      <span className="text-xs text-green-600">보정 완료</span>
-                    ) : (
-                      <span className="text-xs text-muted">미보정</span>
-                    )}
-                    {artwork.useEnhanced && (
-                      <span className="text-xs px-1.5 py-0.5 bg-blue-50 text-blue-600 border border-blue-200">
-                        보정 사용 중
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex gap-2 shrink-0">
                   {artwork.enhancedImage && (
+                    <span className="absolute top-1 right-1 text-[10px] px-1 py-0.5 bg-green-500 text-white">
+                      보정
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs truncate font-medium">{artwork.title}</p>
+                <div>
+                  {artwork.enhancedImage ? (
                     <button
                       onClick={() => handleToggleEnhanced(artwork)}
-                      className="px-3 py-1.5 text-xs border border-border hover:border-text transition-colors"
+                      className="w-full py-1 text-[11px] border border-border hover:border-text transition-colors"
                     >
                       {artwork.useEnhanced ? '원본 사용' : '보정 사용'}
                     </button>
-                  )}
-                  {!artwork.enhancedImage && (
+                  ) : (
                     <button
                       onClick={() => handleEnhance(artwork)}
                       disabled={!dailyAllowed || status !== 'idle'}
-                      className="px-3 py-1.5 text-xs border border-border hover:border-text transition-colors disabled:opacity-50"
+                      className="w-full py-1 text-[11px] border border-border hover:border-text transition-colors disabled:opacity-50"
                     >
                       보정하기
                     </button>
@@ -299,7 +287,7 @@ export default function EnhancePage() {
           </div>
         )}
 
-        <p className="text-xs text-muted mt-8 text-center">
+        <p className="text-xs text-muted mt-6 text-center">
           총 {artworks.length}점 · 보정 완료 {artworks.filter((a) => a.enhancedImage).length}점
         </p>
       </main>
