@@ -9,9 +9,14 @@ service cloud.firestore {
       allow create, update, delete: if request.auth != null;
     }
 
-    // Inquiries: anyone can create (contact form), only authenticated can read/delete
+    // Inquiries: anyone can create (contact form) with field validation, only authenticated can read/delete
     match /inquiries/{inquiryId} {
-      allow create: if true;
+      allow create: if request.resource.data.keys().hasOnly(['name', 'email', 'type', 'artwork', 'message', 'createdAt'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() < 200
+        && request.resource.data.email is string
+        && request.resource.data.message is string
+        && request.resource.data.message.size() < 5000;
       allow read, update, delete: if request.auth != null;
     }
 

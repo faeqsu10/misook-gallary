@@ -27,7 +27,7 @@ export default function ContactForm() {
     setLoading(true);
     setError('');
 
-    if (formData.honeypot) { setSubmitted(true); return; }
+    if (formData.honeypot) { setLoading(false); setSubmitted(true); return; }
 
     try {
       await addDoc(collection(db, 'inquiries'), {
