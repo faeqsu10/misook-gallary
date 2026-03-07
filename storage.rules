@@ -9,6 +9,13 @@ service firebase.storage {
                    && request.resource.contentType.matches('image/.*');
     }
 
+    match /enhanced/{fileName} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.resource.size < 10 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
+    }
+
     // Deny everything else
     match /{allPaths=**} {
       allow read, write: if false;

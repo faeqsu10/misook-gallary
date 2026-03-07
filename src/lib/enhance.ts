@@ -9,7 +9,7 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 
-const DAILY_LIMIT = 1;
+const DAILY_LIMIT = Number(process.env.NEXT_PUBLIC_ENHANCE_DAILY_LIMIT) || 1;
 const COLLECTION = 'enhance_logs';
 
 function todayKey(): string {
