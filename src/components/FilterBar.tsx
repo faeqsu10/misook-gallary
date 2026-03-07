@@ -17,12 +17,13 @@ export default function FilterBar({
 }: FilterBarProps) {
   return (
     <div className="flex flex-wrap gap-6 mb-10">
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-xs text-muted shrink-0">분류</span>
         {(Object.keys(CATEGORY_LABELS) as CategoryFilter[]).map((key) => (
           <button
             key={key}
             onClick={() => onCategoryChange(key)}
-            className={`px-4 py-1.5 text-xs tracking-wider border transition-colors ${
+            className={`px-4 py-2.5 text-sm tracking-wider border transition-colors ${
               category === key
                 ? 'border-text text-text'
                 : 'border-border text-muted hover:border-muted'
@@ -33,12 +34,13 @@ export default function FilterBar({
           </button>
         ))}
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-xs text-muted shrink-0">상태</span>
         {(Object.keys(STATUS_LABELS) as StatusFilter[]).map((key) => (
           <button
             key={key}
             onClick={() => onStatusChange(key)}
-            className={`px-4 py-1.5 text-xs tracking-wider border transition-colors ${
+            className={`px-4 py-2.5 text-sm tracking-wider border transition-colors ${
               status === key
                 ? 'border-text text-text'
                 : 'border-border text-muted hover:border-muted'

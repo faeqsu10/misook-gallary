@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 export default function ArtworkViewer({
   src,
@@ -11,15 +12,18 @@ export default function ArtworkViewer({
   alt: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const isExternal = src.startsWith('http');
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
 
-    // Lock body scroll when modal is open
     document.body.style.overflow = 'hidden';
 
-    // ESC key handler to close modal
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setIsOpen(false);
     };
@@ -30,6 +34,44 @@ export default function ArtworkViewer({
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen]);
+
+  const modal = isOpen && mounted
+    ? createPortal(
+        <div
+          className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center cursor-zoom-out fade-in-scale"
+          onClick={() => setIsOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="작품 확대 뷰"
+        >
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsOpen(false);
+            }}
+            className="absolute top-4 right-4 w-12 h-12 flex items-center justify-center text-white/70 hover:text-white text-3xl z-10 transition-colors"
+            aria-label="닫기"
+          >
+            &times;
+          </button>
+          <div className="relative w-[90vw] h-[90vh]">
+            {isExternal ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={src} alt={alt} className="w-full h-full object-contain" />
+            ) : (
+              <Image
+                src={src}
+                alt={alt}
+                fill
+                sizes="90vw"
+                className="object-contain"
+              />
+            )}
+          </div>
+        </div>,
+        document.body
+      )
+    : null;
 
   return (
     <>
@@ -55,38 +97,7 @@ export default function ArtworkViewer({
           />
         )}
       </div>
-
-      {/* Fullscreen modal */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center cursor-zoom-out fade-in-scale"
-          onClick={() => setIsOpen(false)}
-          role="dialog"
-          aria-label="작품 확대 뷰"
-        >
-          <button
-            onClick={() => setIsOpen(false)}
-            className="absolute top-6 right-6 text-white/70 hover:text-white text-2xl z-10"
-            aria-label="닫기"
-          >
-            &times;
-          </button>
-          <div className="relative w-[90vw] h-[90vh]">
-            {isExternal ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={src} alt={alt} className="w-full h-full object-contain" />
-            ) : (
-              <Image
-                src={src}
-                alt={alt}
-                fill
-                sizes="90vw"
-                className="object-contain"
-              />
-            )}
-          </div>
-        </div>
-      )}
+      {modal}
     </>
   );
 }

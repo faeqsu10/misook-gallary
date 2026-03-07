@@ -78,6 +78,7 @@ export default function Header() {
 
       {/* Mobile nav */}
       <nav
+        aria-hidden={!isOpen}
         className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-bg ${
           isOpen ? 'max-h-64 opacity-100 border-t border-border' : 'max-h-0 opacity-0'
         }`}

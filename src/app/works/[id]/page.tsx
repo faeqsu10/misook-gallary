@@ -49,7 +49,7 @@ export default function WorkDetailPage() {
     <section className="max-w-6xl mx-auto px-6 py-16">
       <Link
         href="/gallery"
-        className="inline-block text-xs text-muted tracking-wider hover:text-text transition-colors mb-8"
+        className="inline-block text-sm py-2 text-muted tracking-wider hover:text-text transition-colors mb-8"
       >
         &larr; 갤러리
       </Link>
@@ -119,7 +119,7 @@ export default function WorkDetailPage() {
             {prev ? (
               <Link
                 href={`/works/${prev.id}`}
-                className="text-xs text-muted hover:text-text transition-colors"
+                className="text-sm py-2 inline-block text-muted hover:text-text transition-colors"
               >
                 &larr; {prev.title}
               </Link>
@@ -129,7 +129,7 @@ export default function WorkDetailPage() {
             {next ? (
               <Link
                 href={`/works/${next.id}`}
-                className="text-xs text-muted hover:text-text transition-colors"
+                className="text-sm py-2 inline-block text-muted hover:text-text transition-colors"
               >
                 {next.title} &rarr;
               </Link>

@@ -3,8 +3,9 @@
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
-
+  where,
   addDoc,
   updateDoc,
   deleteDoc,
@@ -29,9 +30,21 @@ export async function fetchArtworks(): Promise<Artwork[]> {
 }
 
 export async function fetchArtwork(id: string): Promise<Artwork | null> {
-  const snapshot = await getDocs(collection(db, COLLECTION));
-  const found = snapshot.docs.find((d) => d.data().id === id || d.id === id);
-  if (!found) return null;
+  // 1) Try direct document lookup by Firestore doc ID
+  const docSnap = await getDoc(doc(db, COLLECTION, id));
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    // If the doc's `id` field matches or the doc has no separate `id` field, use it
+    if (!data.id || data.id === id) {
+      return { id: data.id || docSnap.id, ...data } as Artwork;
+    }
+  }
+
+  // 2) Fallback: the artwork `id` field differs from the Firestore doc ID
+  const q = query(collection(db, COLLECTION), where('id', '==', id));
+  const snapshot = await getDocs(q);
+  if (snapshot.empty) return null;
+  const found = snapshot.docs[0];
   return { id: found.data().id || found.id, ...found.data() } as Artwork;
 }
 
@@ -61,22 +74,52 @@ export async function updateArtwork(
   docId: string,
   data: Partial<Artwork>
 ): Promise<void> {
-  // Find the document by artwork id field
-  const snapshot = await getDocs(collection(db, COLLECTION));
-  const found = snapshot.docs.find((d) => d.data().id === docId || d.id === docId);
-  if (found) {
-    await updateDoc(doc(db, COLLECTION, found.id), data);
+  // 1) Try direct document lookup by Firestore doc ID
+  const docSnap = await getDoc(doc(db, COLLECTION, docId));
+  if (docSnap.exists()) {
+    const docData = docSnap.data();
+    if (!docData.id || docData.id === docId) {
+      await updateDoc(doc(db, COLLECTION, docSnap.id), data);
+      return;
+    }
+  }
+
+  // 2) Fallback: artwork `id` field differs from Firestore doc ID
+  const q = query(collection(db, COLLECTION), where('id', '==', docId));
+  const snapshot = await getDocs(q);
+  if (!snapshot.empty) {
+    await updateDoc(doc(db, COLLECTION, snapshot.docs[0].id), data);
   }
 }
 
 export async function deleteArtwork(artworkId: string): Promise<void> {
-  const snapshot = await getDocs(collection(db, COLLECTION));
-  const found = snapshot.docs.find((d) => d.data().id === artworkId || d.id === artworkId);
-  if (found) {
-    const data = found.data();
-    if (data.image?.startsWith('https://')) {
-      await deleteImage(data.image);
+  let foundId: string | null = null;
+  let foundData: Record<string, unknown> | null = null;
+
+  // 1) Try direct document lookup by Firestore doc ID
+  const docSnap = await getDoc(doc(db, COLLECTION, artworkId));
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    if (!data.id || data.id === artworkId) {
+      foundId = docSnap.id;
+      foundData = data;
     }
-    await deleteDoc(doc(db, COLLECTION, found.id));
+  }
+
+  // 2) Fallback: artwork `id` field differs from Firestore doc ID
+  if (!foundId) {
+    const q = query(collection(db, COLLECTION), where('id', '==', artworkId));
+    const snapshot = await getDocs(q);
+    if (!snapshot.empty) {
+      foundId = snapshot.docs[0].id;
+      foundData = snapshot.docs[0].data();
+    }
+  }
+
+  if (foundId && foundData) {
+    if (typeof foundData.image === 'string' && foundData.image.startsWith('https://')) {
+      await deleteImage(foundData.image);
+    }
+    await deleteDoc(doc(db, COLLECTION, foundId));
   }
 }
