@@ -100,7 +100,7 @@ export default function WorkDetailPage() {
           </div>
 
           {artwork.description && (
-            <p className="mt-6 text-sm leading-relaxed text-muted border-t border-border pt-6">
+            <p className="mt-6 text-base leading-relaxed text-muted border-t border-border pt-6">
               {artwork.description}
             </p>
           )}

@@ -41,7 +41,7 @@ export default function AboutPage() {
         {artist.bio.split('\n\n').map((paragraph, i) => (
           <p
             key={i}
-            className="text-sm leading-relaxed text-muted mb-4"
+            className="text-base leading-relaxed text-muted mb-4"
           >
             {paragraph}
           </p>
@@ -55,7 +55,7 @@ export default function AboutPage() {
           {artist.statement.split('\n').map((line, i) => (
             <p
               key={i}
-              className="text-sm leading-relaxed text-muted italic mb-2"
+              className="text-base leading-relaxed text-muted italic mb-2"
             >
               {line}
             </p>
@@ -87,7 +87,7 @@ export default function AboutPage() {
 
       {/* Contact CTA */}
       <div className="mt-20 pt-12 border-t border-border text-center fade-in-up delay-300">
-        <p className="text-sm text-muted mb-3">
+        <p className="text-base text-muted mb-3">
           작품에 대해 궁금하신 점이 있으시면
         </p>
         <Link

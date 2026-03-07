@@ -35,7 +35,7 @@ export default function Home() {
               선과 형태를<br />
               다시 세상에 놓습니다.
             </h1>
-            <p className="text-sm text-muted leading-relaxed mb-8 max-w-md">
+            <p className="text-base text-muted leading-relaxed mb-8 max-w-md">
               지금도 여전히, 그리고 다시, 그리는 사람.
               <br />
               정미숙의 작품 세계를 만나보세요.
@@ -78,7 +78,7 @@ export default function Home() {
           <h2 className="font-serif text-xl">주요 작품</h2>
           <Link
             href="/gallery"
-            className="text-xs text-muted tracking-wider hover:text-text transition-colors"
+            className="text-sm py-2 text-muted tracking-wider hover:text-text transition-colors"
           >
             전체 보기 &rarr;
           </Link>
@@ -121,7 +121,7 @@ export default function Home() {
           </blockquote>
           <Link
             href="/about"
-            className="inline-block mt-8 text-xs text-muted tracking-wider hover:text-text transition-colors"
+            className="inline-block mt-8 py-2 text-sm text-muted tracking-wider hover:text-text transition-colors"
           >
             작가 소개 &rarr;
           </Link>
