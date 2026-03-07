@@ -15,5 +15,6 @@ export const config = {
     '/admin/edit/:path*',
     '/admin/seed',
     '/admin/inquiries',
+    '/admin/enhance',
   ],
 };

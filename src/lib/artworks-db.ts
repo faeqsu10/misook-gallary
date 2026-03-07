@@ -54,6 +54,12 @@ export async function uploadImage(file: File, filename: string): Promise<string>
   return getDownloadURL(storageRef);
 }
 
+export async function uploadEnhancedImage(blob: Blob, filename: string): Promise<string> {
+  const storageRef = ref(storage, `enhanced/${filename}`);
+  await uploadBytes(storageRef, blob);
+  return getDownloadURL(storageRef);
+}
+
 export async function deleteImage(imageUrl: string): Promise<void> {
   try {
     const storageRef = ref(storage, imageUrl);

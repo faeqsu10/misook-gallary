@@ -175,6 +175,12 @@ export default function DashboardPage() {
             문의 관리
           </Link>
           <Link
+            href="/admin/enhance"
+            className="px-5 py-2 text-xs border border-border hover:border-text transition-colors tracking-wider"
+          >
+            AI 보정
+          </Link>
+          <Link
             href="/admin/seed"
             className="px-5 py-2 text-xs border border-border hover:border-text transition-colors tracking-wider"
           >

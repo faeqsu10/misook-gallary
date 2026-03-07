@@ -9,6 +9,9 @@ export interface Artwork {
   status: 'collection' | 'exhibit' | 'inquiry';
   description?: string;
   image: string;
+  enhancedImage?: string;
+  useEnhanced?: boolean;
+  enhancedAt?: string;
   featured?: boolean;
   order: number;
 }

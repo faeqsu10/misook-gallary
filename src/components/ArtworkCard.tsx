@@ -10,7 +10,7 @@ export default function ArtworkCard({ artwork }: { artwork: Artwork }) {
     >
       <div className="relative aspect-[3/4] overflow-hidden bg-border">
         <Image
-          src={artwork.image}
+          src={artwork.useEnhanced && artwork.enhancedImage ? artwork.enhancedImage : artwork.image}
           alt={artwork.title}
           fill
           sizes="(max-width: 768px) 50vw, 33vw"

@@ -52,7 +52,7 @@ export default function Home() {
             <Link href={`/works/${hero.id}`}>
               <div className="relative aspect-[3/4] overflow-hidden">
                 <Image
-                  src={hero.image}
+                  src={hero.useEnhanced && hero.enhancedImage ? hero.enhancedImage : hero.image}
                   alt={hero.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -89,7 +89,7 @@ export default function Home() {
             >
               <div className="relative aspect-[3/4] overflow-hidden bg-border">
                 <Image
-                  src={artwork.image}
+                  src={artwork.useEnhanced && artwork.enhancedImage ? artwork.enhancedImage : artwork.image}
                   alt={artwork.title}
                   fill
                   sizes="(max-width: 768px) 50vw, 25vw"

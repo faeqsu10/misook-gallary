@@ -81,7 +81,13 @@ export default function WorkDetailPage() {
       <div className="grid md:grid-cols-[1fr_380px] gap-12 md:gap-16">
         {/* Image */}
         <div className="fade-in">
-          <ArtworkViewer src={artwork.image} alt={artwork.title} />
+          <ArtworkViewer
+            src={artwork.useEnhanced && artwork.enhancedImage ? artwork.enhancedImage : artwork.image}
+            alt={artwork.title}
+          />
+          {artwork.useEnhanced && artwork.enhancedImage && (
+            <p className="text-xs text-muted mt-2 text-center">디지털 보정 이미지</p>
+          )}
         </div>
 
         {/* Info */}
