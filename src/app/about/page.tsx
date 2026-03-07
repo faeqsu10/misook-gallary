@@ -12,8 +12,9 @@ export default function AboutPage() {
     <section className="max-w-3xl mx-auto px-6 py-16">
       {/* Hero Quote */}
       <div className="mb-20 py-12 text-center fade-in-up">
-        <p className="font-serif text-2xl md:text-3xl lg:text-4xl leading-snug tracking-tight text-text/90 italic">
-          &ldquo;나의 그림은 직선과 곡선, 형태와 색의 대화입니다.&rdquo;
+        <p className="font-serif text-2xl md:text-3xl lg:text-4xl leading-snug tracking-tight text-text/90 italic break-keep">
+          &ldquo;나의 그림은<br className="hidden md:inline" /> 직선과 곡선,{' '}
+          형태와 색의 대화입니다.&rdquo;
         </p>
         <p className="mt-6 text-xs text-muted tracking-widest uppercase">
           {artist.name} &mdash; 작업 노트에서
