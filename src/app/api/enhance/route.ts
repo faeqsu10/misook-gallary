@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.0-flash-exp-image-generation';
-
-const ENHANCE_PROMPT =
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash-image';
+const ENHANCE_PROMPT = process.env.GEMINI_ENHANCE_PROMPT ||
   '이 작품 사진의 촬영 품질을 보정해주세요. ' +
   '갤러리 조명 아래에서 전문 카메라로 촬영한 것처럼 색감을 교정하고 조명을 균일하게 만들어주세요. ' +
   '작품의 원래 구도, 색상, 스타일은 절대 변경하지 마세요. ' +
