@@ -13,6 +13,7 @@ const notoSerifKR = Noto_Serif_KR({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://misook-gallery.vercel.app'),
   title: {
     default: '정미숙 — 선과 형태의 언어',
     template: '%s — 정미숙',

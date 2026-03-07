@@ -52,7 +52,7 @@ export default function Home() {
               <div className="relative aspect-[3/4] overflow-hidden">
                 {hero.image.startsWith('http') ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={hero.image} alt={hero.title} className="w-full h-full object-cover" />
+                  <img src={hero.image} alt={hero.title} loading="eager" className="w-full h-full object-cover" />
                 ) : (
                   <Image
                     src={hero.image}
@@ -88,12 +88,13 @@ export default function Home() {
             <Link
               key={artwork.id}
               href={`/works/${artwork.id}`}
-              className={`group block fade-in-up delay-${(i + 1) * 100}`}
+              className="group block fade-in-up"
+              style={{ animationDelay: `${(i + 1) * 100}ms` }}
             >
               <div className="relative aspect-[3/4] overflow-hidden bg-border">
                 {artwork.image.startsWith('http') ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={artwork.image} alt={artwork.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <img src={artwork.image} alt={artwork.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                 ) : (
                   <Image
                     src={artwork.image}
