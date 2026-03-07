@@ -37,10 +37,15 @@ export default function EnhancePage() {
   async function loadData() {
     setFetching(true);
     try {
-      const [data, limit] = await Promise.all([fetchArtworks(), checkDailyLimit()]);
+      const data = await fetchArtworks();
       setArtworks(data);
-      setDailyUsed(limit.used);
-      setDailyAllowed(limit.allowed);
+      try {
+        const limit = await checkDailyLimit();
+        setDailyUsed(limit.used);
+        setDailyAllowed(limit.allowed);
+      } catch {
+        // enhance_logs 컬렉션이 없거나 권한 부족 시 기본값 유지
+      }
     } catch {
       setError('데이터를 불러오는 데 실패했습니다.');
     } finally {
