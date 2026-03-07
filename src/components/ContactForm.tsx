@@ -29,6 +29,17 @@ export default function ContactForm() {
 
     if (formData.honeypot) { setLoading(false); setSubmitted(true); return; }
 
+    if (formData.name.length > 100) {
+      setError('이름은 100자 이하로 입력해주세요.');
+      setLoading(false);
+      return;
+    }
+    if (formData.message.length > 5000) {
+      setError('메시지는 5000자 이하로 입력해주세요.');
+      setLoading(false);
+      return;
+    }
+
     try {
       await addDoc(collection(db, 'inquiries'), {
         name: formData.name,

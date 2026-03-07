@@ -42,9 +42,27 @@ export default function UploadPage() {
     if (!loading && !user) router.push('/admin');
   }, [user, loading, router]);
 
+  function validateFile(f: File): string | null {
+    const MAX_SIZE = 10 * 1024 * 1024;
+    const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!ALLOWED_TYPES.includes(f.type)) {
+      return '허용되지 않는 파일 형식입니다. (JPG, PNG, WebP만 가능)';
+    }
+    if (f.size > MAX_SIZE) {
+      return '파일 크기가 10MB를 초과합니다.';
+    }
+    return null;
+  }
+
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (!f) return;
+    const validationError = validateFile(f);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+    setError('');
     setFile(f);
     const reader = new FileReader();
     reader.onload = () => setPreview(reader.result as string);
