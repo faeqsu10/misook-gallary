@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.0-flash-exp';
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.0-flash-exp-image-generation';
 
 const ENHANCE_PROMPT =
   '이 작품 사진의 촬영 품질을 보정해주세요. ' +
