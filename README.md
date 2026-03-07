@@ -2,6 +2,9 @@
 
 정미숙 작가의 개인 미술관 웹사이트입니다.
 
+🔗 **Live**: [misook-gallery.vercel.app](https://misook-gallery.vercel.app)
+📦 **GitHub**: [faeqsu10/misook-gallary](https://github.com/faeqsu10/misook-gallary)
+
 ## Overview
 
 홍익대학교 도예과를 졸업한 정미숙 작가의 작품을 전시하는 온라인 갤러리입니다. "갤러리 화이트 큐브" 컨셉으로, 작품이 주인공이 되는 미니멀하고 조용한 공간을 지향합니다.
