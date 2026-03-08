@@ -6,6 +6,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { InquiryType } from '@/lib/types';
 import { useI18n } from '@/lib/i18n';
+import { logger } from '@/lib/logger';
 
 export default function ContactForm() {
   const { t } = useI18n();
@@ -71,7 +72,7 @@ export default function ContactForm() {
       localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()));
       setSubmitted(true);
     } catch (err) {
-      console.error('Failed to submit inquiry:', err);
+      logger.error('문의 전송 실패', { action: 'inquiry.submit', source: 'client', error: err });
       setError(t.submitError);
     } finally {
       setLoading(false);

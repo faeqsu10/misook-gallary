@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Gemini API error:', errorText);
+      console.error(JSON.stringify({ level: 'ERROR', action: 'enhance.gemini', source: 'server', error: errorText }));
       return NextResponse.json(
         { error: 'Gemini API 호출에 실패했습니다.' },
         { status: 502 }
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
       mimeType: imagePart.inlineData.mimeType || 'image/jpeg',
     });
   } catch (err) {
-    console.error('Enhance API error:', err);
+    console.error(JSON.stringify({ level: 'ERROR', action: 'enhance.server', source: 'server', error: String(err) }));
     return NextResponse.json(
       { error: '서버 오류가 발생했습니다.' },
       { status: 500 }

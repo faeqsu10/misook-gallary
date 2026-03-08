@@ -10,6 +10,7 @@ import { Artwork, getDisplayImage } from '@/lib/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { artist } from '@/data/artist';
+import { logger } from '@/lib/logger';
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -36,7 +37,7 @@ export default function DashboardPage() {
       const data = await fetchArtworks();
       setArtworks(data);
     } catch (err) {
-      console.error('Failed to fetch artworks:', err);
+      logger.error('작품 목록 로드 실패', { action: 'artwork.fetch', source: 'admin', userId: user?.uid, userEmail: user?.email, error: err });
     } finally {
       setFetching(false);
     }
@@ -49,7 +50,7 @@ export default function DashboardPage() {
       await deleteArtwork(id);
       setArtworks((prev) => prev.filter((a) => a.id !== id));
     } catch (err) {
-      console.error('Failed to delete:', err);
+      logger.error('작품 삭제 실패', { action: 'artwork.delete', source: 'admin', userId: user?.uid, userEmail: user?.email, metadata: { artworkId: id }, error: err });
       alert('삭제에 실패했습니다.');
     } finally {
       setDeleting(null);
@@ -202,6 +203,12 @@ export default function DashboardPage() {
             className="px-5 py-2 text-xs border border-border hover:border-text transition-colors tracking-wider"
           >
             문의 관리
+          </Link>
+          <Link
+            href="/admin/logs"
+            className="px-5 py-2 text-xs border border-border hover:border-text transition-colors tracking-wider"
+          >
+            로그
           </Link>
           <Link
             href="/admin/enhance"

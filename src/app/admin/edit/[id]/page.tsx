@@ -6,6 +6,7 @@ import { useAuth } from '@/lib/auth-context';
 import { fetchArtwork, updateArtwork, uploadImage } from '@/lib/artworks-db';
 import { Artwork } from '@/lib/types';
 import AdminShell from '@/components/AdminShell';
+import { logger } from '@/lib/logger';
 
 const CATEGORIES = [
   { value: 'portrait', label: '인물' },
@@ -70,7 +71,7 @@ export default function EditPage() {
       setFeatured(data.featured || false);
       setPreview(data.image);
     } catch (err) {
-      console.error('Failed to load artwork:', err);
+      logger.error('작품 로드 실패', { action: 'artwork.load', source: 'admin', userId: user?.uid, userEmail: user?.email, metadata: { artworkId }, error: err });
     } finally {
       setFetching(false);
     }
@@ -116,7 +117,7 @@ export default function EditPage() {
 
       router.push('/admin/dashboard');
     } catch (err) {
-      console.error('Update failed:', err);
+      logger.error('작품 수정 실패', { action: 'artwork.update', source: 'admin', userId: user?.uid, userEmail: user?.email, metadata: { artworkId }, error: err });
       setError('수정에 실패했습니다. 다시 시도해주세요.');
     } finally {
       setSubmitting(false);

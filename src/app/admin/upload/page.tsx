@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { uploadImage, createArtwork } from '@/lib/artworks-db';
 import { Artwork } from '@/lib/types';
 import AdminShell from '@/components/AdminShell';
+import { logger } from '@/lib/logger';
 
 const CATEGORIES = [
   { value: 'portrait', label: '인물' },
@@ -101,7 +102,7 @@ export default function UploadPage() {
 
       router.push('/admin/dashboard');
     } catch (err) {
-      console.error('Upload failed:', err);
+      logger.error('작품 등록 실패', { action: 'artwork.upload', source: 'admin', error: err });
       setError('업로드에 실패했습니다. 다시 시도해주세요.');
     } finally {
       setSubmitting(false);

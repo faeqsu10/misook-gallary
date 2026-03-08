@@ -7,6 +7,7 @@ import { db } from '@/lib/firebase';
 import { artworks as staticArtworks } from '@/data/artworks';
 import Link from 'next/link';
 import AdminShell from '@/components/AdminShell';
+import { logger } from '@/lib/logger';
 
 export default function SeedPage() {
   const { user } = useAuth();
@@ -59,7 +60,7 @@ export default function SeedPage() {
       );
       setStatus('done');
     } catch (err) {
-      console.error('Seed failed:', err);
+      logger.error('시드 데이터 등록 실패', { action: 'seed.upload', source: 'admin', error: err });
       setMessage('시드 실패. Firestore 권한을 확인해주세요.');
       setStatus('error');
     }
