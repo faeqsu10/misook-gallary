@@ -146,10 +146,28 @@ tasks/            # 할일, 교훈
 - `next/image`의 `fill` + `object-cover` + `sizes` 속성으로 반응형 이미지
 - Object URL 사용 시 반드시 `URL.revokeObjectURL()`로 메모리 해제
 
+### Firebase (Server-side / Admin SDK)
+- 서버(API 라우트)에서는 Firebase Client SDK 사용 불가 → `firebase-admin` 사용
+- `FIREBASE_SERVICE_ACCOUNT` 환경변수에 서비스 계정 JSON 전체를 넣고 `JSON.parse()`
+- `adminAuth.verifyIdToken(token)`으로 세션 쿠키 검증
+- `adminDb`(Firestore Admin)로 서버사이드 데이터 접근 (sitemap, rate limiting 등)
+- 싱글톤: `getApps().length > 0` 체크 후 초기화
+
+### Testing (Vitest)
+- Node 18에서는 `jsdom` 대신 `environment: 'node'` 또는 `happy-dom` 사용
+- 설정 파일은 `.mts` 확장자로 ESM 보장 (`vitest.config.mts`)
+- 순수 유틸리티 함수는 DOM 환경 불필요 — `environment: 'node'`로 충분
+- `@` alias는 vitest.config에서 `resolve.alias` 설정 필요
+
+### Data Caching
+- 여러 페이지에서 같은 데이터 사용 시 Context로 단일 fetch + 전역 공유
+- hooks는 Context를 참조하도록 래핑 — 기존 API 유지하면서 중복 제거
+- Provider는 layout.tsx에서 래핑 (I18nProvider 안쪽)
+
 ### Security
 - Honeypot 필드로 봇 스팸 방지
-- 클라이언트 rate limiting: localStorage 타임스탬프 (우회 가능하지만 간단)
-- API 라우트 인증: `__session` 쿠키 확인
+- 서버사이드 rate limiting: API 라우트 + Firestore IP 기반 (클라이언트 rate limiting은 UX 용도만)
+- API 라우트 인증: `adminAuth.verifyIdToken()`으로 토큰 유효성 검증 (쿠키 존재 여부만으론 부족)
 - CSP, X-Frame-Options 등 보안 헤더 설정
 - 입력 길이 제한 (이름 100자, 메시지 5000자 등)
 - 환경변수에 민감 정보 (.env는 .gitignore)
@@ -183,6 +201,11 @@ tasks/            # 할일, 교훈
 | 하이드레이션 불일치 | localStorage 초기값 ≠ 서버 렌더링 | useState lazy initializer + 사소한 flash 허용 |
 | 모델 이름 변경 | Gemini API 모델 업데이트 | 환경변수로 외부화, 하드코딩 금지 |
 | intersection 타입 충돌 | `Omit<A> & { same_key: different_type }` | 별도 인터페이스 정의 |
+| Vitest jsdom ESM 에러 | Node 18 + jsdom ESM 의존성 충돌 | `environment: 'node'` 또는 happy-dom 사용 |
+| vitest.config.ts CJS 에러 | ESM 모듈을 CJS로 로드 | `.mts` 확장자로 변경 |
+| 라벨 중복 정의 | 3곳에서 같은 라벨 맵 생성 | i18n에 Record 맵으로 중앙화 |
+| 쿠키 존재만 체크 | 만료/위조 토큰 구분 불가 | `verifyIdToken()`으로 서버 검증 |
+| 페이지마다 중복 fetch | useEffect마다 Firestore 호출 | Context로 단일 fetch + 전역 공유 |
 
 ---
 
