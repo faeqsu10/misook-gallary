@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useAuth } from '@/lib/auth-context';
-import { fetchArtworks, deleteArtwork } from '@/lib/artworks-db';
+import { fetchArtworks, deleteArtwork, updateArtwork } from '@/lib/artworks-db';
 import { Artwork, getDisplayImage } from '@/lib/types';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -53,6 +53,25 @@ export default function DashboardPage() {
       alert('삭제에 실패했습니다.');
     } finally {
       setDeleting(null);
+    }
+  }
+
+  async function handleSwapOrder(indexA: number, indexB: number) {
+    const a = artworks[indexA];
+    const b = artworks[indexB];
+    if (!a || !b) return;
+    try {
+      await Promise.all([
+        updateArtwork(a.id, { order: b.order }),
+        updateArtwork(b.id, { order: a.order }),
+      ]);
+      const updated = [...artworks];
+      updated[indexA] = { ...a, order: b.order };
+      updated[indexB] = { ...b, order: a.order };
+      updated.sort((x, y) => x.order - y.order);
+      setArtworks(updated);
+    } catch {
+      alert('순서 변경에 실패했습니다.');
     }
   }
 
@@ -115,7 +134,7 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
-            {artworks.map((artwork) => (
+            {artworks.map((artwork, idx) => (
               <div
                 key={artwork.id}
                 className="border border-border p-2 space-y-2 hover:bg-card-hover transition-colors"
@@ -123,7 +142,7 @@ export default function DashboardPage() {
                 <div className="relative aspect-square bg-gray-100 overflow-hidden">
                   <Image
                     src={getDisplayImage(artwork)}
-                    alt={artwork.title}
+                    alt={artwork.altText || artwork.title}
                     fill
                     className="object-cover"
                     sizes="(max-width: 640px) 33vw, (max-width: 768px) 25vw, 16vw"
@@ -131,6 +150,22 @@ export default function DashboardPage() {
                   <span className="absolute top-1 left-1 text-[10px] px-1 py-0.5 bg-black/50 text-white">
                     {artwork.order}
                   </span>
+                  <div className="absolute top-1 right-1 flex flex-col gap-0.5">
+                    <button
+                      onClick={() => handleSwapOrder(idx, idx - 1)}
+                      disabled={idx === 0}
+                      className="w-5 h-5 flex items-center justify-center bg-black/50 text-white text-[10px] hover:bg-black/80 disabled:opacity-30"
+                    >
+                      ▲
+                    </button>
+                    <button
+                      onClick={() => handleSwapOrder(idx, idx + 1)}
+                      disabled={idx === artworks.length - 1}
+                      className="w-5 h-5 flex items-center justify-center bg-black/50 text-white text-[10px] hover:bg-black/80 disabled:opacity-30"
+                    >
+                      ▼
+                    </button>
+                  </div>
                 </div>
                 <p className="text-xs truncate font-medium">{artwork.title}</p>
                 <p className="text-[10px] text-muted truncate">

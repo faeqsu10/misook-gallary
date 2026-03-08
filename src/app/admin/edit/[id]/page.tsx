@@ -35,6 +35,7 @@ export default function EditPage() {
   const [category, setCategory] = useState<Artwork['category']>('abstract');
   const [status, setStatus] = useState<Artwork['status']>('inquiry');
   const [description, setDescription] = useState('');
+  const [altText, setAltText] = useState('');
   const [order, setOrder] = useState(1);
   const [featured, setFeatured] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -64,6 +65,7 @@ export default function EditPage() {
       setCategory(data.category);
       setStatus(data.status);
       setDescription(data.description || '');
+      setAltText(data.altText || '');
       setOrder(data.order);
       setFeatured(data.featured || false);
       setPreview(data.image);
@@ -106,6 +108,7 @@ export default function EditPage() {
         category,
         status,
         description: description || undefined,
+        altText: altText || undefined,
         image: imageUrl,
         featured,
         order,
@@ -192,6 +195,11 @@ export default function EditPage() {
           <div>
             <label className="block text-xs tracking-wider text-muted mb-1">작품 설명</label>
             <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="w-full px-4 py-3 border border-border bg-white text-sm focus:outline-none focus:border-text resize-none" />
+          </div>
+
+          <div>
+            <label className="block text-xs tracking-wider text-muted mb-1">대체 텍스트 (접근성)</label>
+            <input type="text" value={altText} onChange={(e) => setAltText(e.target.value)} placeholder="시각 장애인을 위한 작품 설명 (미입력 시 제목 사용)" className="w-full px-4 py-3 border border-border bg-white text-sm focus:outline-none focus:border-text" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

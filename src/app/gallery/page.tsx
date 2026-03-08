@@ -6,11 +6,14 @@ import { useArtworks } from '@/lib/use-artworks';
 import ArtworkCard from '@/components/ArtworkCard';
 import FilterBar from '@/components/FilterBar';
 import { SkeletonGrid } from '@/components/Skeleton';
+import { useI18n } from '@/lib/i18n';
 
 export default function GalleryPage() {
   const { artworks, loading } = useArtworks();
+  const { t } = useI18n();
   const [category, setCategory] = useState<CategoryFilter>('all');
   const [status, setStatus] = useState<StatusFilter>('all');
+  const [visibleCount, setVisibleCount] = useState(12);
 
   const filtered = artworks.filter((a) => {
     if (category !== 'all' && a.category !== category) return false;
@@ -20,38 +23,50 @@ export default function GalleryPage() {
 
   return (
     <section className="max-w-6xl mx-auto px-6 py-16">
-      <h1 className="font-serif text-2xl md:text-3xl mb-2">Gallery</h1>
+      <h1 className="font-serif text-2xl md:text-3xl mb-2">{t.galleryTitle}</h1>
       <p className="text-sm text-muted mb-10">
         {category === 'all' && status === 'all'
-          ? `${artworks.length}점의 작품을 감상하세요.`
-          : `${filtered.length}점의 작품이 선택되었습니다.`}
+          ? t.galleryCount(artworks.length)
+          : t.galleryFiltered(filtered.length)}
       </p>
 
       <FilterBar
         category={category}
         status={status}
-        onCategoryChange={setCategory}
-        onStatusChange={setStatus}
+        onCategoryChange={(v) => { setCategory(v); setVisibleCount(12); }}
+        onStatusChange={(v) => { setStatus(v); setVisibleCount(12); }}
       />
 
       {loading ? (
         <SkeletonGrid count={6} />
       ) : filtered.length === 0 ? (
         <p className="text-center text-sm text-muted py-20">
-          해당 조건의 작품이 없습니다.
+          {t.noResults}
         </p>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
-          {filtered.map((artwork, i) => (
-            <div
-              key={artwork.id}
-              className="fade-in-up"
-              style={{ animationDelay: `${Math.min(i * 50, 300)}ms` }}
-            >
-              <ArtworkCard artwork={artwork} />
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10">
+            {filtered.slice(0, visibleCount).map((artwork, i) => (
+              <div
+                key={artwork.id}
+                className="fade-in-up"
+                style={{ animationDelay: `${Math.min(i * 50, 300)}ms` }}
+              >
+                <ArtworkCard artwork={artwork} />
+              </div>
+            ))}
+          </div>
+          {visibleCount < filtered.length && (
+            <div className="text-center mt-12">
+              <button
+                onClick={() => setVisibleCount((v) => v + 12)}
+                className="px-8 py-3 border border-border text-sm tracking-wider hover:border-text transition-colors"
+              >
+                {t.loadMore(filtered.length - visibleCount)}
+              </button>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
     </section>
   );

@@ -16,6 +16,7 @@ export interface Artwork {
   category: 'portrait' | 'abstract' | 'drawing';
   status: 'collection' | 'exhibit' | 'inquiry';
   description?: string;
+  altText?: string;
   image: string;
   // Legacy fields (backward compat)
   enhancedImage?: string;

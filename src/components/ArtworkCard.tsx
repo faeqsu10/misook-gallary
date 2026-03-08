@@ -1,8 +1,19 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { Artwork, STATUS_LABELS, getDisplayImage } from '@/lib/types';
+import { Artwork, getDisplayImage } from '@/lib/types';
+import { useI18n } from '@/lib/i18n';
 
 export default function ArtworkCard({ artwork }: { artwork: Artwork }) {
+  const { t } = useI18n();
+
+  const statusLabels: Record<string, string> = {
+    collection: t.collection,
+    exhibit: t.exhibit,
+    inquiry: t.inquiry,
+  };
+
   return (
     <Link
       href={`/works/${artwork.id}`}
@@ -11,7 +22,7 @@ export default function ArtworkCard({ artwork }: { artwork: Artwork }) {
       <div className="relative aspect-[3/4] overflow-hidden bg-border">
         <Image
           src={getDisplayImage(artwork)}
-          alt={artwork.title}
+          alt={artwork.altText || artwork.title}
           fill
           sizes="(max-width: 768px) 50vw, 33vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -25,7 +36,7 @@ export default function ArtworkCard({ artwork }: { artwork: Artwork }) {
             <span className="opacity-40">·</span>
           )}
           {artwork.status !== 'collection' && (
-            <span>{STATUS_LABELS[artwork.status]}</span>
+            <span>{statusLabels[artwork.status]}</span>
           )}
         </div>
       </div>

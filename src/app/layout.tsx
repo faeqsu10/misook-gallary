@@ -1,11 +1,15 @@
 import type { Metadata } from 'next';
 import { Noto_Serif_KR } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
+import { I18nProvider } from '@/lib/i18n';
 import { SITE_URL } from '@/lib/constants';
 import { artist } from '@/data/artist';
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 const notoSerifKR = Noto_Serif_KR({
   subsets: ['latin'],
@@ -67,10 +71,20 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col">
-        <ScrollToTop />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        {GA_ID && (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
+            <Script id="ga-init" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
+            </Script>
+          </>
+        )}
+        <I18nProvider>
+          <ScrollToTop />
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </I18nProvider>
       </body>
     </html>
   );

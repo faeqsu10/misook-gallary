@@ -1,12 +1,17 @@
+'use client';
+
 import Link from 'next/link';
 import { artist } from '@/data/artist';
+import { useI18n } from '@/lib/i18n';
 
 export default function Footer() {
+  const { t } = useI18n();
+
   return (
     <footer className="border-t border-border py-12">
       <div className="max-w-6xl mx-auto px-6 text-center relative">
         <p className="font-serif text-sm text-muted">
-          이곳은 한 작가의 작업을 천천히 모아가는 공간입니다.
+          {t.footerRights}
         </p>
         <p className="mt-4 text-xs text-muted opacity-60">
           &copy; {new Date().getFullYear()} {artist.name}. All rights reserved.

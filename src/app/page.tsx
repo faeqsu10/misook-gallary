@@ -5,9 +5,11 @@ import Link from 'next/link';
 import { useArtworks } from '@/lib/use-artworks';
 import { getDisplayImage } from '@/lib/types';
 import { artist } from '@/data/artist';
+import { useI18n } from '@/lib/i18n';
 
 export default function Home() {
   const { artworks, featured } = useArtworks();
+  const { t } = useI18n();
   const hero = artworks.find((a) => a.id === 'bold-circles-lines') || featured[0] || artworks[0];
   const preview = featured.filter((a) => a.id !== hero?.id).slice(0, 4);
 
@@ -33,20 +35,20 @@ export default function Home() {
         <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
           <div className="fade-in-up">
             <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
-              오래 품어온<br />
-              선과 형태를<br />
-              다시 세상에 놓습니다.
+              {t.heroTitle.split('\n').map((line, i) => (
+                <span key={i}>{line}{i < t.heroTitle.split('\n').length - 1 && <br />}</span>
+              ))}
             </h1>
             <p className="text-base text-muted leading-relaxed mb-8 max-w-md">
-              지금도 여전히, 그리고 다시, 그리는 사람.
+              {t.heroSub}
               <br />
-              {artist.name}의 작품 세계를 만나보세요.
+              {artist.name}{t.heroSubSuffix}
             </p>
             <Link
               href="/gallery"
               className="inline-block px-8 py-3 border border-text text-sm tracking-wider hover:bg-text hover:text-bg transition-colors"
             >
-              작품 보기
+              {t.viewWorks}
             </Link>
           </div>
           <div className="fade-in delay-200">
@@ -72,12 +74,12 @@ export default function Home() {
       {/* Featured Works */}
       <section className="max-w-6xl mx-auto px-6 py-16 border-t border-border">
         <div className="flex items-baseline justify-between mb-10">
-          <h2 className="font-serif text-xl">주요 작품</h2>
+          <h2 className="font-serif text-xl">{t.featuredWorks}</h2>
           <Link
             href="/gallery"
             className="text-sm py-2 text-muted tracking-wider hover:text-text transition-colors"
           >
-            전체 보기 &rarr;
+            {t.viewAll} &rarr;
           </Link>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -115,7 +117,7 @@ export default function Home() {
             href="/about"
             className="inline-block mt-8 py-2 text-sm text-muted tracking-wider hover:text-text transition-colors"
           >
-            작가 소개 &rarr;
+            {t.artistStatement} &rarr;
           </Link>
         </div>
       </section>

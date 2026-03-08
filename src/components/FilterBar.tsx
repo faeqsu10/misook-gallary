@@ -1,6 +1,7 @@
 'use client';
 
-import { CategoryFilter, StatusFilter, CATEGORY_LABELS, STATUS_LABELS } from '@/lib/types';
+import { CategoryFilter, StatusFilter } from '@/lib/types';
+import { useI18n } from '@/lib/i18n';
 
 interface FilterBarProps {
   category: CategoryFilter;
@@ -15,11 +16,27 @@ export default function FilterBar({
   onCategoryChange,
   onStatusChange,
 }: FilterBarProps) {
+  const { t } = useI18n();
+
+  const categoryLabels: Record<CategoryFilter, string> = {
+    all: t.all,
+    portrait: t.portrait,
+    abstract: t.abstract,
+    drawing: t.drawing,
+  };
+
+  const statusLabels: Record<StatusFilter, string> = {
+    all: t.all,
+    collection: t.collection,
+    exhibit: t.exhibit,
+    inquiry: t.inquiry,
+  };
+
   return (
     <div className="flex flex-wrap gap-6 mb-10">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs text-muted shrink-0">분류</span>
-        {(Object.keys(CATEGORY_LABELS) as CategoryFilter[]).map((key) => (
+        <span className="text-xs text-muted shrink-0">{t.filterCategory}</span>
+        {(Object.keys(categoryLabels) as CategoryFilter[]).map((key) => (
           <button
             key={key}
             onClick={() => onCategoryChange(key)}
@@ -30,13 +47,13 @@ export default function FilterBar({
             }`}
             aria-pressed={category === key}
           >
-            {CATEGORY_LABELS[key]}
+            {categoryLabels[key]}
           </button>
         ))}
       </div>
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs text-muted shrink-0">상태</span>
-        {(Object.keys(STATUS_LABELS) as StatusFilter[]).map((key) => (
+        <span className="text-xs text-muted shrink-0">{t.filterStatus}</span>
+        {(Object.keys(statusLabels) as StatusFilter[]).map((key) => (
           <button
             key={key}
             onClick={() => onStatusChange(key)}
@@ -47,7 +64,7 @@ export default function FilterBar({
             }`}
             aria-pressed={status === key}
           >
-            {STATUS_LABELS[key]}
+            {statusLabels[key]}
           </button>
         ))}
       </div>

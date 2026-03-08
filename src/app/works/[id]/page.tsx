@@ -4,15 +4,29 @@ import Link from 'next/link';
 
 import { useParams } from 'next/navigation';
 import { useArtwork } from '@/lib/use-artworks';
-import { STATUS_LABELS, CATEGORY_LABELS, getDisplayImage, getDisplayLabel } from '@/lib/types';
+import { getDisplayImage, getDisplayLabel } from '@/lib/types';
 import ArtworkViewer from '@/components/ArtworkViewer';
 import { SITE_URL } from '@/lib/constants';
 import { artist } from '@/data/artist';
+import { useI18n } from '@/lib/i18n';
 
 export default function WorkDetailPage() {
   const params = useParams();
   const id = params.id as string;
   const { artwork, prev, next, loading } = useArtwork(id);
+  const { t } = useI18n();
+
+  const categoryLabels: Record<string, string> = {
+    portrait: t.portrait,
+    abstract: t.abstract,
+    drawing: t.drawing,
+  };
+
+  const statusLabels: Record<string, string> = {
+    collection: t.collection,
+    exhibit: t.exhibit,
+    inquiry: t.inquiry,
+  };
 
   if (loading) {
     return (
@@ -39,9 +53,9 @@ export default function WorkDetailPage() {
   if (!artwork) {
     return (
       <section className="max-w-6xl mx-auto px-6 py-16 text-center">
-        <h1 className="font-serif text-2xl mb-4">작품을 찾을 수 없습니다</h1>
+        <h1 className="font-serif text-2xl mb-4">{t.artworkNotFound}</h1>
         <Link href="/gallery" className="text-sm text-muted hover:text-text transition-colors">
-          갤러리로 돌아가기
+          {t.backToGallery}
         </Link>
       </section>
     );
@@ -76,7 +90,7 @@ export default function WorkDetailPage() {
         href="/gallery"
         className="inline-block text-sm py-2 text-muted tracking-wider hover:text-text transition-colors mb-8"
       >
-        &larr; 갤러리
+        &larr; {t.backToGallery}
       </Link>
       <div className="grid md:grid-cols-[1fr_380px] gap-12 md:gap-16">
         {/* Image */}
@@ -104,29 +118,29 @@ export default function WorkDetailPage() {
           <div className="space-y-3 text-sm border-t border-border pt-6">
             {artwork.year && (
               <div className="flex justify-between">
-                <span className="text-muted">제작연도</span>
+                <span className="text-muted">{t.year}</span>
                 <span>{artwork.year}</span>
               </div>
             )}
             {artwork.medium && (
               <div className="flex justify-between">
-                <span className="text-muted">재료</span>
+                <span className="text-muted">{t.medium}</span>
                 <span>{artwork.medium}</span>
               </div>
             )}
             {artwork.dimensions && (
               <div className="flex justify-between">
-                <span className="text-muted">크기</span>
+                <span className="text-muted">{t.dimensions}</span>
                 <span>{artwork.dimensions}</span>
               </div>
             )}
             <div className="flex justify-between">
-              <span className="text-muted">분류</span>
-              <span>{CATEGORY_LABELS[artwork.category]}</span>
+              <span className="text-muted">{t.category}</span>
+              <span>{categoryLabels[artwork.category] || artwork.category}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted">상태</span>
-              <span>{STATUS_LABELS[artwork.status]}</span>
+              <span className="text-muted">{t.status}</span>
+              <span>{statusLabels[artwork.status] || artwork.status}</span>
             </div>
           </div>
 
@@ -141,7 +155,7 @@ export default function WorkDetailPage() {
               href={`/contact?artwork=${encodeURIComponent(artwork.title)}`}
               className="inline-block mt-8 px-8 py-3 border border-text text-sm tracking-wider hover:bg-text hover:text-bg transition-colors"
             >
-              문의하기
+              {t.contactInquiry}
             </Link>
           )}
 

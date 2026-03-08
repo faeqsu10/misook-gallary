@@ -4,9 +4,17 @@ import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { INQUIRY_TYPE_LABELS, InquiryType } from '@/lib/types';
+import { InquiryType } from '@/lib/types';
+import { useI18n } from '@/lib/i18n';
 
 export default function ContactForm() {
+  const { t } = useI18n();
+
+  const inquiryTypeLabels: Record<InquiryType, string> = {
+    purchase: t.purchaseInquiry,
+    exhibit: t.exhibitInquiry,
+    support: t.supportMessage,
+  };
   const searchParams = useSearchParams();
   const artworkTitle = searchParams.get('artwork') || '';
 
@@ -29,13 +37,24 @@ export default function ContactForm() {
 
     if (formData.honeypot) { setLoading(false); setSubmitted(true); return; }
 
+    // Rate limiting: 5분에 1회
+    const RATE_LIMIT_KEY = 'contact_last_submit';
+    const RATE_LIMIT_MS = 5 * 60 * 1000;
+    const lastSubmit = localStorage.getItem(RATE_LIMIT_KEY);
+    if (lastSubmit && Date.now() - Number(lastSubmit) < RATE_LIMIT_MS) {
+      const remaining = Math.ceil((RATE_LIMIT_MS - (Date.now() - Number(lastSubmit))) / 60000);
+      setError(t.rateLimitError(remaining));
+      setLoading(false);
+      return;
+    }
+
     if (formData.name.length > 100) {
-      setError('이름은 100자 이하로 입력해주세요.');
+      setError(t.nameTooLong);
       setLoading(false);
       return;
     }
     if (formData.message.length > 5000) {
-      setError('메시지는 5000자 이하로 입력해주세요.');
+      setError(t.messageTooLong);
       setLoading(false);
       return;
     }
@@ -49,10 +68,11 @@ export default function ContactForm() {
         message: formData.message,
         createdAt: serverTimestamp(),
       });
+      localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()));
       setSubmitted(true);
     } catch (err) {
       console.error('Failed to submit inquiry:', err);
-      setError('문의 전송에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      setError(t.submitError);
     } finally {
       setLoading(false);
     }
@@ -61,10 +81,10 @@ export default function ContactForm() {
   if (submitted) {
     return (
       <div className="text-center py-16 fade-in">
-        <p className="font-serif text-xl mb-4">감사합니다</p>
+        <p className="font-serif text-xl mb-4">{t.thankYou}</p>
         <p className="text-sm text-muted leading-relaxed">
-          문의가 접수되었습니다.<br />
-          소중한 관심에 감사드립니다.
+          {t.inquiryReceived}<br />
+          {t.thankMessage}
         </p>
         <button
           onClick={() => {
@@ -73,7 +93,7 @@ export default function ContactForm() {
           }}
           className="mt-8 text-sm text-muted underline underline-offset-4 hover:text-text"
         >
-          새 문의 작성
+          {t.newInquiry}
         </button>
       </div>
     );
@@ -83,7 +103,7 @@ export default function ContactForm() {
     <form onSubmit={handleSubmit} className="max-w-lg space-y-6">
       <div>
         <label htmlFor="name" className="block text-sm mb-2">
-          이름
+          {t.name}
         </label>
         <input
           id="name"
@@ -98,7 +118,7 @@ export default function ContactForm() {
 
       <div>
         <label htmlFor="email" className="block text-sm mb-2">
-          이메일
+          {t.email}
         </label>
         <input
           id="email"
@@ -113,7 +133,7 @@ export default function ContactForm() {
 
       <div>
         <label htmlFor="type" className="block text-sm mb-2">
-          문의 유형
+          {t.inquiryType}
         </label>
         <select
           id="type"
@@ -124,9 +144,9 @@ export default function ContactForm() {
           className="w-full px-4 py-3 border border-border bg-transparent text-sm focus:outline-none focus:border-text transition-colors"
           disabled={loading}
         >
-          {(Object.keys(INQUIRY_TYPE_LABELS) as InquiryType[]).map((key) => (
+          {(Object.keys(inquiryTypeLabels) as InquiryType[]).map((key) => (
             <option key={key} value={key}>
-              {INQUIRY_TYPE_LABELS[key]}
+              {inquiryTypeLabels[key]}
             </option>
           ))}
         </select>
@@ -135,7 +155,7 @@ export default function ContactForm() {
       {formData.artwork && (
         <div>
           <label htmlFor="artwork" className="block text-sm mb-2">
-            관련 작품
+            {t.relatedWork}
           </label>
           <input
             id="artwork"
@@ -152,7 +172,7 @@ export default function ContactForm() {
 
       <div>
         <label htmlFor="message" className="block text-sm mb-2">
-          메시지
+          {t.message}
         </label>
         <textarea
           id="message"
@@ -187,7 +207,7 @@ export default function ContactForm() {
         disabled={loading}
         className="px-8 py-3 border border-text text-sm tracking-wider hover:bg-text hover:text-bg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? '전송 중...' : '문의 보내기'}
+        {loading ? t.sending : t.send}
       </button>
     </form>
   );

@@ -4,17 +4,18 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { artist } from '@/data/artist';
-
-const NAV_ITEMS = [
-  { href: '/', label: 'Home' },
-  { href: '/gallery', label: 'Gallery' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
-];
+import { useI18n } from '@/lib/i18n';
 
 export default function Header() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const { t, locale, toggleLocale } = useI18n();
+
+  const navItems = [
+    { href: '/gallery', label: t.gallery },
+    { href: '/about', label: t.about },
+    { href: '/contact', label: t.contact },
+  ];
 
   const isActive = (href: string) => {
     if (href === '/gallery') {
@@ -35,7 +36,7 @@ export default function Header() {
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-8">
-          {NAV_ITEMS.map(({ href, label }) => (
+          {navItems.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
@@ -48,6 +49,12 @@ export default function Header() {
               {label}
             </Link>
           ))}
+          <button
+            onClick={toggleLocale}
+            className="text-xs tracking-wider opacity-50 hover:opacity-100 transition-opacity border border-border px-2 py-1"
+          >
+            {locale === 'ko' ? 'EN' : '한국어'}
+          </button>
         </nav>
 
         {/* Mobile menu button */}
@@ -81,10 +88,10 @@ export default function Header() {
       <nav
         aria-hidden={!isOpen}
         className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out bg-bg ${
-          isOpen ? 'max-h-64 opacity-100 border-t border-border' : 'max-h-0 opacity-0'
+          isOpen ? 'max-h-80 opacity-100 border-t border-border' : 'max-h-0 opacity-0'
         }`}
       >
-        {NAV_ITEMS.map(({ href, label }) => (
+        {navItems.map(({ href, label }) => (
           <Link
             key={href}
             href={href}
@@ -96,6 +103,12 @@ export default function Header() {
             {label}
           </Link>
         ))}
+        <button
+          onClick={() => { toggleLocale(); setIsOpen(false); }}
+          className="block w-full text-left px-6 py-4 text-sm tracking-wider border-b border-border transition-colors hover:bg-card-hover opacity-60"
+        >
+          {locale === 'ko' ? 'English' : '한국어'}
+        </button>
       </nav>
     </header>
   );
