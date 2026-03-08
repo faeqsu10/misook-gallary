@@ -7,6 +7,7 @@ import { auth } from '@/lib/firebase';
 import { useAuth } from '@/lib/auth-context';
 import { fetchArtworks, deleteArtwork } from '@/lib/artworks-db';
 import { Artwork } from '@/lib/types';
+import Image from 'next/image';
 import Link from 'next/link';
 import { artist } from '@/data/artist';
 
@@ -113,48 +114,41 @@ export default function DashboardPage() {
             </Link>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
             {artworks.map((artwork) => (
               <div
                 key={artwork.id}
-                className="flex items-center gap-4 p-4 border border-border hover:bg-card-hover transition-colors"
+                className="border border-border p-2 space-y-2 hover:bg-card-hover transition-colors"
               >
-                {/* Thumbnail */}
-                <div className="w-16 h-16 flex-shrink-0 bg-gray-100 overflow-hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={artwork.image}
+                <div className="relative aspect-square bg-gray-100 overflow-hidden">
+                  <Image
+                    src={artwork.useEnhanced && artwork.enhancedImage ? artwork.enhancedImage : artwork.image}
                     alt={artwork.title}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 33vw, (max-width: 768px) 25vw, 16vw"
                   />
+                  <span className="absolute top-1 left-1 text-[10px] px-1 py-0.5 bg-black/50 text-white">
+                    {artwork.order}
+                  </span>
                 </div>
-
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-medium text-sm truncate">{artwork.title}</h3>
-                  <p className="text-xs text-muted">
-                    {artwork.medium} · {artwork.category}
-                    {artwork.year && ` · ${artwork.year}`}
-                  </p>
-                </div>
-
-                {/* Order */}
-                <span className="text-xs text-muted w-8 text-center">{artwork.order}</span>
-
-                {/* Actions */}
-                <div className="flex gap-2">
+                <p className="text-xs truncate font-medium">{artwork.title}</p>
+                <p className="text-[10px] text-muted truncate">
+                  {artwork.category}{artwork.year && ` · ${artwork.year}`}
+                </p>
+                <div className="flex gap-1">
                   <Link
                     href={`/admin/edit/${artwork.id}`}
-                    className="px-3 py-1.5 text-xs border border-border hover:border-text transition-colors"
+                    className="flex-1 py-1 text-center text-[11px] border border-border hover:border-text transition-colors"
                   >
                     수정
                   </Link>
                   <button
                     onClick={() => handleDelete(artwork.id, artwork.title)}
                     disabled={deleting === artwork.id}
-                    className="px-3 py-1.5 text-xs border border-border text-red-500 hover:border-red-500 transition-colors disabled:opacity-50"
+                    className="flex-1 py-1 text-[11px] border border-border text-red-500 hover:border-red-500 transition-colors disabled:opacity-50"
                   >
-                    {deleting === artwork.id ? '삭제 중...' : '삭제'}
+                    {deleting === artwork.id ? '...' : '삭제'}
                   </button>
                 </div>
               </div>
