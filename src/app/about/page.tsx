@@ -1,13 +1,12 @@
-import type { Metadata } from 'next';
+'use client';
+
 import Link from 'next/link';
 import { artist } from '@/data/artist';
-
-export const metadata: Metadata = {
-  title: '작가 소개',
-  description: artist.bio.slice(0, 160),
-};
+import { useI18n } from '@/lib/i18n';
 
 export default function AboutPage() {
+  const { t } = useI18n();
+
   return (
     <section className="max-w-3xl mx-auto px-6 py-16">
       {/* Hero Quote */}
@@ -17,7 +16,7 @@ export default function AboutPage() {
           형태와 색의 대화입니다.&rdquo;
         </p>
         <p className="mt-6 text-xs text-muted tracking-widest uppercase">
-          {artist.name} &mdash; 작업 노트에서
+          {artist.name} &mdash; {t.fromWorkNote}
         </p>
       </div>
 
@@ -38,7 +37,7 @@ export default function AboutPage() {
 
       {/* Bio */}
       <div className="mb-16 fade-in-up delay-100">
-        <h2 className="font-serif text-lg mb-6">작가 소개</h2>
+        <h2 className="font-serif text-lg mb-6">{t.aboutTitle}</h2>
         {artist.bio.split('\n\n').map((paragraph, i) => (
           <p
             key={i}
@@ -51,7 +50,7 @@ export default function AboutPage() {
 
       {/* Statement */}
       <div className="mb-16 border-t border-border pt-12 fade-in-up delay-200">
-        <h2 className="font-serif text-lg mb-6">작업 노트</h2>
+        <h2 className="font-serif text-lg mb-6">{t.workNote}</h2>
         <blockquote className="pl-6 border-l-2 border-border">
           {artist.statement.split('\n').map((line, i) => (
             <p
@@ -66,7 +65,7 @@ export default function AboutPage() {
 
       {/* History with Timeline */}
       <div className="border-t border-border pt-12 fade-in-up delay-300">
-        <h2 className="font-serif text-lg mb-8">연보</h2>
+        <h2 className="font-serif text-lg mb-8">{t.timeline}</h2>
         <div className="relative ml-3">
           {/* Vertical timeline line */}
           <div className="absolute left-0 top-1 bottom-1 w-px bg-border" />
@@ -89,13 +88,13 @@ export default function AboutPage() {
       {/* Contact CTA */}
       <div className="mt-20 pt-12 border-t border-border text-center fade-in-up delay-300">
         <p className="text-base text-muted mb-3">
-          작품에 대해 궁금하신 점이 있으시면
+          {t.aboutCta}
         </p>
         <Link
           href="/contact"
           className="inline-block font-serif text-sm tracking-wider border-b border-muted pb-0.5 hover:border-foreground transition-colors"
         >
-          문의하기
+          {t.aboutInquiry}
         </Link>
       </div>
     </section>
