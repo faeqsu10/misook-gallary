@@ -86,7 +86,7 @@ export default function ArtworkViewer({
   return (
     <>
       <div
-        className="relative w-full aspect-[3/4] bg-border cursor-zoom-in"
+        className="relative w-full max-h-[75vh] aspect-[3/4] bg-border cursor-zoom-in"
         onClick={() => setIsOpen(true)}
         role="button"
         tabIndex={0}

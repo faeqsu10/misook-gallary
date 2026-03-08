@@ -18,7 +18,7 @@ export default function WorkDetailPage() {
     return (
       <section className="max-w-6xl mx-auto px-6 py-16">
         <div className="grid md:grid-cols-[1fr_380px] gap-12 md:gap-16">
-          <div className="aspect-[3/4] bg-gradient-to-r from-border via-card-hover to-border bg-[length:200%_100%] animate-shimmer" />
+          <div className="aspect-[3/4] max-h-[75vh] bg-gradient-to-r from-border via-card-hover to-border bg-[length:200%_100%] animate-shimmer" />
           <div className="space-y-4">
             <div className="h-8 w-48 bg-border rounded" />
             <div className="h-4 w-32 bg-border rounded" />
