@@ -185,7 +185,7 @@ export default function DashboardPage() {
             className="px-5 py-2 text-xs border border-border hover:border-text transition-colors tracking-wider"
             target="_blank"
           >
-            사이트 보기 &nearr;
+            사이트 보기 ↗
           </Link>
         </div>
       </main>
