@@ -146,7 +146,7 @@ export default function EnhancePage() {
         {/* Daily limit info */}
         <div className="flex items-center justify-between mb-8">
           <p className="text-sm text-muted">
-            오늘 사용: <strong>{dailyUsed}/1</strong>회
+            오늘 사용: <strong>{dailyUsed}/{process.env.NEXT_PUBLIC_ENHANCE_DAILY_LIMIT || '1'}</strong>회
             {!dailyAllowed && ' (소진)'}
           </p>
           <p className="text-xs text-muted">
@@ -264,14 +264,23 @@ export default function EnhancePage() {
                   )}
                 </div>
                 <p className="text-xs truncate font-medium">{artwork.title}</p>
-                <div>
+                <div className="space-y-1">
                   {artwork.enhancedImage ? (
-                    <button
-                      onClick={() => handleToggleEnhanced(artwork)}
-                      className="w-full py-1 text-[11px] border border-border hover:border-text transition-colors"
-                    >
-                      {artwork.useEnhanced ? '원본 사용' : '보정 사용'}
-                    </button>
+                    <>
+                      <button
+                        onClick={() => handleToggleEnhanced(artwork)}
+                        className="w-full py-1 text-[11px] border border-border hover:border-text transition-colors"
+                      >
+                        {artwork.useEnhanced ? '원본 사용' : '보정 사용'}
+                      </button>
+                      <button
+                        onClick={() => handleEnhance(artwork)}
+                        disabled={!dailyAllowed || status !== 'idle'}
+                        className="w-full py-1 text-[11px] border border-border text-muted hover:border-text hover:text-text transition-colors disabled:opacity-50"
+                      >
+                        다시 보정
+                      </button>
+                    </>
                   ) : (
                     <button
                       onClick={() => handleEnhance(artwork)}
