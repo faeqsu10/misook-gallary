@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 import { I18nProvider } from '@/lib/i18n';
+import { ArtworksProvider } from '@/lib/artworks-context';
 import { SITE_URL } from '@/lib/constants';
 import { artist } from '@/data/artist';
 
@@ -80,10 +81,12 @@ export default function RootLayout({
           </>
         )}
         <I18nProvider>
-          <ScrollToTop />
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <ArtworksProvider>
+            <ScrollToTop />
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </ArtworksProvider>
         </I18nProvider>
       </body>
     </html>

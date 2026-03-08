@@ -1,32 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Artwork } from './types';
-import { fetchArtworks } from './artworks-db';
-import { artworks as staticArtworks } from '@/data/artworks';
+import { useArtworksContext } from './artworks-context';
 
 export function useArtworks() {
-  const [artworks, setArtworks] = useState<Artwork[]>(staticArtworks);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchArtworks()
-      .then((data) => {
-        if (data.length > 0) setArtworks(data);
-      })
-      .catch(() => {
-        // Firestore unavailable, keep static data
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  const featured = artworks.filter((a) => a.featured);
-
-  return { artworks, featured, loading };
+  return useArtworksContext();
 }
 
 export function useArtwork(id: string) {
-  const { artworks, loading } = useArtworks();
+  const { artworks, loading } = useArtworksContext();
 
   const artwork = artworks.find((a) => a.id === id) || null;
   const index = artworks.findIndex((a) => a.id === id);

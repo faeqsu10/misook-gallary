@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { adminAuth } from '@/lib/firebase-admin';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_ART_MODEL || process.env.GEMINI_MODEL || 'gemini-3-pro-image-preview';
@@ -12,9 +13,16 @@ const ART_PROMPT = process.env.GEMINI_ART_PROMPT ||
   '작가의 원래 의도를 존중하면서 표현력만 강화해주세요.';
 
 export async function POST(request: NextRequest) {
+  // Verify Firebase session token
   const session = request.cookies.get('__session');
   if (!session?.value) {
     return NextResponse.json({ error: '인증이 필요합니다.' }, { status: 401 });
+  }
+
+  try {
+    await adminAuth.verifyIdToken(session.value);
+  } catch {
+    return NextResponse.json({ error: '세션이 만료되었습니다.' }, { status: 401 });
   }
 
   if (!GEMINI_API_KEY) {

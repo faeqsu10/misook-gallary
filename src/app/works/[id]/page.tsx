@@ -16,17 +16,6 @@ export default function WorkDetailPage() {
   const { artwork, prev, next, loading } = useArtwork(id);
   const { t } = useI18n();
 
-  const categoryLabels: Record<string, string> = {
-    portrait: t.portrait,
-    abstract: t.abstract,
-    drawing: t.drawing,
-  };
-
-  const statusLabels: Record<string, string> = {
-    collection: t.collection,
-    exhibit: t.exhibit,
-    inquiry: t.inquiry,
-  };
 
   if (loading) {
     return (
@@ -136,11 +125,11 @@ export default function WorkDetailPage() {
             )}
             <div className="flex justify-between">
               <span className="text-muted">{t.category}</span>
-              <span>{categoryLabels[artwork.category] || artwork.category}</span>
+              <span>{t.categoryLabels[artwork.category] || artwork.category}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted">{t.status}</span>
-              <span>{statusLabels[artwork.status] || artwork.status}</span>
+              <span>{t.statusLabels[artwork.status] || artwork.status}</span>
             </div>
           </div>
 

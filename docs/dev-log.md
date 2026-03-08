@@ -78,7 +78,7 @@
 | Firebase 프로젝트 | ✅ | misook-gallery |
 | NEXT_PUBLIC_GA_ID | ⬜ | Vercel 환경변수에 GA ID 등록 필요 |
 | GEMINI_ART_MODEL | ✅ | gemini-3-pro-image-preview |
-| Firebase Storage 규칙 업데이트 | ⬜ | enhanced/{allPaths=**} 적용 필요 |
+| Firebase Storage 규칙 업데이트 | ✅ | enhanced/{allPaths=**} 적용 완료 |
 
 ## Phase 6: 로그 관리 시스템
 | 항목 | 상태 | 커밋 | 날짜 |
@@ -103,11 +103,24 @@
 | Contact 페이지 i18n | ✅ | - | 2026-03-08 |
 | 일반화 CLAUDE.md 템플릿 | ✅ | dc7bf18 | 2026-03-08 |
 
+## Phase 8: API 보안 강화
+| 항목 | 상태 | 커밋 | 날짜 |
+|------|------|------|------|
+| Firebase Admin SDK 설정 (firebase-admin.ts) | ✅ | - | 2026-03-08 |
+| API 인증 강화 (verifyIdToken - enhance/enhance-art) | ✅ | - | 2026-03-08 |
+| 서버사이드 문의 API (/api/inquiry) + IP rate limiting | ✅ | - | 2026-03-08 |
+| 동적 sitemap (Firestore 연동) | ✅ | - | 2026-03-08 |
+
+## Phase 9: 성능 + 검색 + 테스트
+| 항목 | 상태 | 커밋 | 날짜 |
+|------|------|------|------|
+| 데이터 캐싱 (ArtworksContext) | ✅ | - | 2026-03-08 |
+| 작품 검색 기능 (제목/재료) | ✅ | - | 2026-03-08 |
+| Vitest 테스트 환경 구축 | ✅ | - | 2026-03-08 |
+| 유틸리티 함수 테스트 (13개) | ✅ | - | 2026-03-08 |
+
 ## 향후 계획
 | 항목 | 우선순위 | 비고 |
 |------|----------|------|
-| About 페이지 i18n | 중 | Server Component → Client 전환 필요 |
 | 작품 드래그 앤 드롭 정렬 | 하 | 현재 ▲▼ 버튼으로 대체 |
-| 서버사이드 rate limiting | 하 | 현재 클라이언트 기반으로 충분 |
-| 작품 검색 기능 | 중 | - |
 | 이미지 워터마크 | 하 | - |

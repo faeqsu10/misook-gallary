@@ -23,6 +23,7 @@ const translations = {
     galleryCount: (n: number) => `${n}점의 작품을 감상하세요.`,
     galleryFiltered: (n: number) => `${n}점의 작품이 선택되었습니다.`,
     noResults: '해당 조건의 작품이 없습니다.',
+    searchPlaceholder: '작품 제목, 재료로 검색',
     loadMore: (n: number) => `더 보기 (${n}점 남음)`,
     // Filters
     all: '전체',
@@ -76,6 +77,9 @@ const translations = {
     nameTooLong: '이름은 100자 이하로 입력해주세요.',
     messageTooLong: '메시지는 5000자 이하로 입력해주세요.',
     submitError: '문의 전송에 실패했습니다. 잠시 후 다시 시도해주세요.',
+    // Centralized label maps
+    categoryLabels: { all: '전체', portrait: '인물', abstract: '추상', drawing: '드로잉' } as Record<string, string>,
+    statusLabels: { all: '전체', collection: '소장용', exhibit: '전시 가능', inquiry: '문의 가능' } as Record<string, string>,
     // Footer
     footerRights: '모든 작품의 저작권은 작가에게 있습니다.',
   },
@@ -94,6 +98,7 @@ const translations = {
     galleryCount: (n: number) => `Explore ${n} artworks.`,
     galleryFiltered: (n: number) => `${n} artworks selected.`,
     noResults: 'No artworks match the filter.',
+    searchPlaceholder: 'Search by title or medium',
     loadMore: (n: number) => `Load More (${n} remaining)`,
     all: 'All',
     portrait: 'Portrait',
@@ -140,6 +145,8 @@ const translations = {
     nameTooLong: 'Name must be 100 characters or less.',
     messageTooLong: 'Message must be 5000 characters or less.',
     submitError: 'Failed to send. Please try again later.',
+    categoryLabels: { all: 'All', portrait: 'Portrait', abstract: 'Abstract', drawing: 'Drawing' } as Record<string, string>,
+    statusLabels: { all: 'All', collection: 'Collection', exhibit: 'Available for Exhibition', inquiry: 'Inquiries Welcome' } as Record<string, string>,
     footerRights: 'All artworks are copyrighted by the artist.',
   },
 } as const;
@@ -148,6 +155,8 @@ type TranslationStrings = typeof translations.ko;
 type Translations = {
   [K in keyof TranslationStrings]: TranslationStrings[K] extends (...args: infer A) => infer R
     ? (...args: A) => R
+    : TranslationStrings[K] extends Record<string, string>
+    ? Record<string, string>
     : string;
 };
 

@@ -13,11 +13,18 @@ export default function GalleryPage() {
   const { t } = useI18n();
   const [category, setCategory] = useState<CategoryFilter>('all');
   const [status, setStatus] = useState<StatusFilter>('all');
+  const [search, setSearch] = useState('');
   const [visibleCount, setVisibleCount] = useState(12);
 
   const filtered = artworks.filter((a) => {
     if (category !== 'all' && a.category !== category) return false;
     if (status !== 'all' && a.status !== status) return false;
+    if (search) {
+      const q = search.toLowerCase();
+      const matchTitle = a.title.toLowerCase().includes(q);
+      const matchMedium = a.medium?.toLowerCase().includes(q);
+      if (!matchTitle && !matchMedium) return false;
+    }
     return true;
   });
 
@@ -29,6 +36,16 @@ export default function GalleryPage() {
           ? t.galleryCount(artworks.length)
           : t.galleryFiltered(filtered.length)}
       </p>
+
+      <div className="mb-6">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => { setSearch(e.target.value); setVisibleCount(12); }}
+          placeholder={t.searchPlaceholder}
+          className="w-full max-w-sm px-4 py-2.5 border border-border bg-transparent text-sm focus:outline-none focus:border-text transition-colors"
+        />
+      </div>
 
       <FilterBar
         category={category}

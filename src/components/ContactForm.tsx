@@ -2,11 +2,8 @@
 
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 import { InquiryType } from '@/lib/types';
 import { useI18n } from '@/lib/i18n';
-import { logger } from '@/lib/logger';
 
 export default function ContactForm() {
   const { t } = useI18n();
@@ -61,18 +58,33 @@ export default function ContactForm() {
     }
 
     try {
-      await addDoc(collection(db, 'inquiries'), {
-        name: formData.name,
-        email: formData.email,
-        type: formData.type,
-        artwork: formData.artwork,
-        message: formData.message,
-        createdAt: serverTimestamp(),
+      const res = await fetch('/api/inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          type: formData.type,
+          artwork: formData.artwork,
+          message: formData.message,
+          honeypot: formData.honeypot,
+        }),
       });
+
+      if (!res.ok) {
+        const data = await res.json();
+        if (res.status === 429) {
+          setError(data.error);
+        } else {
+          setError(data.error || t.submitError);
+        }
+        setLoading(false);
+        return;
+      }
+
       localStorage.setItem(RATE_LIMIT_KEY, String(Date.now()));
       setSubmitted(true);
-    } catch (err) {
-      logger.error('문의 전송 실패', { action: 'inquiry.submit', source: 'client', error: err });
+    } catch {
       setError(t.submitError);
     } finally {
       setLoading(false);

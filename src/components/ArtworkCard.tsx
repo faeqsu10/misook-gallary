@@ -8,12 +8,6 @@ import { useI18n } from '@/lib/i18n';
 export default function ArtworkCard({ artwork }: { artwork: Artwork }) {
   const { t } = useI18n();
 
-  const statusLabels: Record<string, string> = {
-    collection: t.collection,
-    exhibit: t.exhibit,
-    inquiry: t.inquiry,
-  };
-
   return (
     <Link
       href={`/works/${artwork.id}`}
@@ -36,7 +30,7 @@ export default function ArtworkCard({ artwork }: { artwork: Artwork }) {
             <span className="opacity-40">·</span>
           )}
           {artwork.status !== 'collection' && (
-            <span>{statusLabels[artwork.status]}</span>
+            <span>{t.statusLabels[artwork.status]}</span>
           )}
         </div>
       </div>

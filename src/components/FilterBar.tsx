@@ -18,25 +18,11 @@ export default function FilterBar({
 }: FilterBarProps) {
   const { t } = useI18n();
 
-  const categoryLabels: Record<CategoryFilter, string> = {
-    all: t.all,
-    portrait: t.portrait,
-    abstract: t.abstract,
-    drawing: t.drawing,
-  };
-
-  const statusLabels: Record<StatusFilter, string> = {
-    all: t.all,
-    collection: t.collection,
-    exhibit: t.exhibit,
-    inquiry: t.inquiry,
-  };
-
   return (
     <div className="flex flex-wrap gap-6 mb-10">
       <div className="flex flex-wrap items-center gap-2">
         <span className="text-xs text-muted shrink-0">{t.filterCategory}</span>
-        {(Object.keys(categoryLabels) as CategoryFilter[]).map((key) => (
+        {(Object.keys(t.categoryLabels) as CategoryFilter[]).map((key) => (
           <button
             key={key}
             onClick={() => onCategoryChange(key)}
@@ -47,13 +33,13 @@ export default function FilterBar({
             }`}
             aria-pressed={category === key}
           >
-            {categoryLabels[key]}
+            {t.categoryLabels[key]}
           </button>
         ))}
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <span className="text-xs text-muted shrink-0">{t.filterStatus}</span>
-        {(Object.keys(statusLabels) as StatusFilter[]).map((key) => (
+        {(Object.keys(t.statusLabels) as StatusFilter[]).map((key) => (
           <button
             key={key}
             onClick={() => onStatusChange(key)}
@@ -64,7 +50,7 @@ export default function FilterBar({
             }`}
             aria-pressed={status === key}
           >
-            {statusLabels[key]}
+            {t.statusLabels[key]}
           </button>
         ))}
       </div>
