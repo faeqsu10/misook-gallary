@@ -54,8 +54,13 @@ export async function uploadImage(file: File, filename: string): Promise<string>
   return getDownloadURL(storageRef);
 }
 
-export async function uploadEnhancedImage(blob: Blob, filename: string): Promise<string> {
-  const storageRef = ref(storage, `enhanced/${filename}`);
+export async function uploadEnhancedImage(
+  blob: Blob,
+  filename: string,
+  tier: 'corrected' | 'artEnhanced' = 'corrected'
+): Promise<string> {
+  const storageTier = tier === 'artEnhanced' ? 'art-enhanced' : 'corrected';
+  const storageRef = ref(storage, `enhanced/${storageTier}/${filename}`);
   await uploadBytes(storageRef, blob);
   return getDownloadURL(storageRef);
 }

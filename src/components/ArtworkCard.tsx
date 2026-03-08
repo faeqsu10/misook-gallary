@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Artwork, STATUS_LABELS } from '@/lib/types';
+import { Artwork, STATUS_LABELS, getDisplayImage } from '@/lib/types';
 
 export default function ArtworkCard({ artwork }: { artwork: Artwork }) {
   return (
@@ -10,7 +10,7 @@ export default function ArtworkCard({ artwork }: { artwork: Artwork }) {
     >
       <div className="relative aspect-[3/4] overflow-hidden bg-border">
         <Image
-          src={artwork.useEnhanced && artwork.enhancedImage ? artwork.enhancedImage : artwork.image}
+          src={getDisplayImage(artwork)}
           alt={artwork.title}
           fill
           sizes="(max-width: 768px) 50vw, 33vw"

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useArtworks } from '@/lib/use-artworks';
+import { getDisplayImage } from '@/lib/types';
 import { artist } from '@/data/artist';
 
 export default function Home() {
@@ -52,7 +53,7 @@ export default function Home() {
             <Link href={`/works/${hero.id}`}>
               <div className="relative aspect-[3/4] overflow-hidden">
                 <Image
-                  src={hero.useEnhanced && hero.enhancedImage ? hero.enhancedImage : hero.image}
+                  src={getDisplayImage(hero)}
                   alt={hero.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -89,7 +90,7 @@ export default function Home() {
             >
               <div className="relative aspect-[3/4] overflow-hidden bg-border">
                 <Image
-                  src={artwork.useEnhanced && artwork.enhancedImage ? artwork.enhancedImage : artwork.image}
+                  src={getDisplayImage(artwork)}
                   alt={artwork.title}
                   fill
                   sizes="(max-width: 768px) 50vw, 25vw"

@@ -9,27 +9,37 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 
-const DAILY_LIMIT = Number(process.env.NEXT_PUBLIC_ENHANCE_DAILY_LIMIT) || 1;
+import type { EnhanceTier } from './types';
+
+const DAILY_LIMIT_CORRECTED = Number(process.env.NEXT_PUBLIC_ENHANCE_DAILY_LIMIT) || 3;
+const DAILY_LIMIT_ART = Number(process.env.NEXT_PUBLIC_ENHANCE_ART_DAILY_LIMIT) || 1;
 const COLLECTION = 'enhance_logs';
 
 function todayKey(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-export async function checkDailyLimit(): Promise<{
+export async function checkDailyLimit(tier: EnhanceTier = 'corrected'): Promise<{
   allowed: boolean;
   used: number;
+  limit: number;
 }> {
   const today = todayKey();
-  const q = query(collection(db, COLLECTION), where('date', '==', today));
+  const q = query(
+    collection(db, COLLECTION),
+    where('date', '==', today),
+    where('tier', '==', tier)
+  );
   const snapshot = await getDocs(q);
-  return { allowed: snapshot.size < DAILY_LIMIT, used: snapshot.size };
+  const limit = tier === 'artEnhanced' ? DAILY_LIMIT_ART : DAILY_LIMIT_CORRECTED;
+  return { allowed: snapshot.size < limit, used: snapshot.size, limit };
 }
 
-export async function recordEnhancement(artworkId: string): Promise<void> {
+export async function recordEnhancement(artworkId: string, tier: EnhanceTier = 'corrected'): Promise<void> {
   await addDoc(collection(db, COLLECTION), {
     date: todayKey(),
     artworkId,
+    tier,
     createdAt: new Date().toISOString(),
   });
 }
@@ -82,9 +92,11 @@ export async function fetchImageAsBase64(
 
 export async function callEnhanceApi(
   imageBase64: string,
-  mimeType: string
+  mimeType: string,
+  tier: EnhanceTier = 'corrected'
 ): Promise<{ imageBase64: string; mimeType: string }> {
-  const response = await fetch('/api/enhance', {
+  const endpoint = tier === 'artEnhanced' ? '/api/enhance-art' : '/api/enhance';
+  const response = await fetch(endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ imageBase64, mimeType }),

@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { useParams } from 'next/navigation';
 import { useArtwork } from '@/lib/use-artworks';
-import { STATUS_LABELS, CATEGORY_LABELS } from '@/lib/types';
+import { STATUS_LABELS, CATEGORY_LABELS, getDisplayImage, getDisplayLabel } from '@/lib/types';
 import ArtworkViewer from '@/components/ArtworkViewer';
 import { SITE_URL } from '@/lib/constants';
 import { artist } from '@/data/artist';
@@ -82,11 +82,11 @@ export default function WorkDetailPage() {
         {/* Image */}
         <div className="fade-in">
           <ArtworkViewer
-            src={artwork.useEnhanced && artwork.enhancedImage ? artwork.enhancedImage : artwork.image}
+            src={getDisplayImage(artwork)}
             alt={artwork.title}
           />
-          {artwork.useEnhanced && artwork.enhancedImage && (
-            <p className="text-xs text-muted mt-2 text-center">디지털 보정 이미지</p>
+          {getDisplayLabel(artwork) && (
+            <p className="text-xs text-muted mt-2 text-center">{getDisplayLabel(artwork)}</p>
           )}
         </div>
 

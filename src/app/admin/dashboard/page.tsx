@@ -6,7 +6,7 @@ import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useAuth } from '@/lib/auth-context';
 import { fetchArtworks, deleteArtwork } from '@/lib/artworks-db';
-import { Artwork } from '@/lib/types';
+import { Artwork, getDisplayImage } from '@/lib/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { artist } from '@/data/artist';
@@ -122,7 +122,7 @@ export default function DashboardPage() {
               >
                 <div className="relative aspect-square bg-gray-100 overflow-hidden">
                   <Image
-                    src={artwork.useEnhanced && artwork.enhancedImage ? artwork.enhancedImage : artwork.image}
+                    src={getDisplayImage(artwork)}
                     alt={artwork.title}
                     fill
                     className="object-cover"

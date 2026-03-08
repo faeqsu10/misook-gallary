@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.1-flash-image-preview';
-const ENHANCE_PROMPT = process.env.GEMINI_ENHANCE_PROMPT ||
-  '이 작품 사진의 촬영 품질을 보정해주세요. ' +
-  '갤러리 조명 아래에서 전문 카메라로 촬영한 것처럼 색감을 교정하고 조명을 균일하게 만들어주세요. ' +
-  '작품의 원래 구도, 색상, 스타일은 절대 변경하지 마세요. ' +
-  '배경은 깨끗한 흰색 벽으로 정리해주세요.';
+const GEMINI_MODEL = process.env.GEMINI_ART_MODEL || process.env.GEMINI_MODEL || 'gemini-3.1-flash-image-preview';
+const ART_PROMPT = process.env.GEMINI_ART_PROMPT ||
+  '이 작품의 예술적 완성도를 높여주세요. ' +
+  '작가의 원래 구도와 주제를 유지하면서, 다음을 개선해주세요: ' +
+  '색채의 깊이와 조화를 강화하고, 붓터치와 질감의 표현력을 높이고, ' +
+  '명암 대비를 더 극적으로 만들고, 전체적인 완성도를 갤러리 전시 수준으로 올려주세요. ' +
+  '중요: 작품의 구도, 주제, 기본 색감 방향은 반드시 유지하세요. ' +
+  '새로운 요소를 추가하거나 구도를 변경하지 마세요. ' +
+  '작가의 원래 의도를 존중하면서 표현력만 강화해주세요.';
 
 export async function POST(request: NextRequest) {
   const session = request.cookies.get('__session');
@@ -43,7 +46,7 @@ export async function POST(request: NextRequest) {
                 data: imageBase64,
               },
             },
-            { text: ENHANCE_PROMPT },
+            { text: ART_PROMPT },
           ],
         },
       ],
@@ -60,7 +63,7 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Gemini API error:', errorText);
+      console.error('Gemini Art API error:', errorText);
       return NextResponse.json(
         { error: 'Gemini API 호출에 실패했습니다.' },
         { status: 502 }
@@ -69,7 +72,6 @@ export async function POST(request: NextRequest) {
 
     const result = await response.json();
 
-    // Extract image from response
     const parts = result.candidates?.[0]?.content?.parts;
     if (!parts) {
       return NextResponse.json(
@@ -83,7 +85,6 @@ export async function POST(request: NextRequest) {
     );
 
     if (!imagePart?.inlineData) {
-      // Gemini may return text-only response
       const textPart = parts.find((p: { text?: string }) => p.text);
       return NextResponse.json(
         { error: textPart?.text || '이미지 생성에 실패했습니다.' },
@@ -96,7 +97,7 @@ export async function POST(request: NextRequest) {
       mimeType: imagePart.inlineData.mimeType || 'image/jpeg',
     });
   } catch (err) {
-    console.error('Enhance API error:', err);
+    console.error('Art Enhance API error:', err);
     return NextResponse.json(
       { error: '서버 오류가 발생했습니다.' },
       { status: 500 }
