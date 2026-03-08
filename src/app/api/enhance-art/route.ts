@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
-const GEMINI_MODEL = process.env.GEMINI_ART_MODEL || process.env.GEMINI_MODEL || 'gemini-3.1-flash-image-preview';
+const GEMINI_MODEL = process.env.GEMINI_ART_MODEL || process.env.GEMINI_MODEL || 'gemini-3-pro-image-preview';
 const ART_PROMPT = process.env.GEMINI_ART_PROMPT ||
   '이 작품의 예술적 완성도를 높여주세요. ' +
   '작가의 원래 구도와 주제를 유지하면서, 다음을 개선해주세요: ' +
