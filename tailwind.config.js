@@ -16,7 +16,7 @@ module.exports = {
       },
       fontFamily: {
         serif: ['var(--font-noto-serif-kr)', 'Georgia', 'serif'],
-        sans: ['Pretendard Variable', 'Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-pretendard)', 'Pretendard Variable', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
       },
       keyframes: {
         shimmer: {

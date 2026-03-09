@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Noto_Serif_KR } from 'next/font/google';
+import localFont from 'next/font/local';
 import Script from 'next/script';
 import './globals.css';
 import Header from '@/components/Header';
@@ -17,6 +18,13 @@ const notoSerifKR = Noto_Serif_KR({
   weight: ['400', '700'],
   variable: '--font-noto-serif-kr',
   display: 'swap',
+});
+
+const pretendard = localFont({
+  src: '../../public/fonts/PretendardVariable.woff2',
+  variable: '--font-pretendard',
+  display: 'swap',
+  weight: '100 900',
 });
 
 export const metadata: Metadata = {
@@ -45,7 +53,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko" className={notoSerifKR.variable}>
+    <html lang="ko" className={`${notoSerifKR.variable} ${pretendard.variable}`}>
       <head>
         <script
           type="application/ld+json"
@@ -62,13 +70,6 @@ export default function RootLayout({
               },
             }),
           }}
-        />
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          as="style"
-          crossOrigin="anonymous"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
         />
       </head>
       <body className="min-h-screen flex flex-col">
