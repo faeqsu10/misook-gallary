@@ -6,11 +6,24 @@ import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useAuth } from '@/lib/auth-context';
 import { fetchArtworks, deleteArtwork, updateArtwork } from '@/lib/artworks-db';
-import { Artwork, getDisplayImage } from '@/lib/types';
-import Image from 'next/image';
+import { Artwork } from '@/lib/types';
 import Link from 'next/link';
 import { artist } from '@/data/artist';
 import { logger } from '@/lib/logger';
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  rectSortingStrategy,
+} from '@dnd-kit/sortable';
+import SortableArtworkCard from '@/components/admin/SortableArtworkCard';
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -18,6 +31,12 @@ export default function DashboardPage() {
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [fetching, setFetching] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 5 } }),
+  );
 
   useEffect(() => {
     if (!loading && !user) {
@@ -57,22 +76,35 @@ export default function DashboardPage() {
     }
   }
 
-  async function handleSwapOrder(indexA: number, indexB: number) {
-    const a = artworks[indexA];
-    const b = artworks[indexB];
-    if (!a || !b) return;
+  async function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = artworks.findIndex((a) => a.id === active.id);
+    const newIndex = artworks.findIndex((a) => a.id === over.id);
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    // Reorder locally first for instant feedback
+    const reordered = [...artworks];
+    const [moved] = reordered.splice(oldIndex, 1);
+    reordered.splice(newIndex, 0, moved);
+
+    // Assign new order values
+    const updated = reordered.map((a, i) => ({ ...a, order: i + 1 }));
+    setArtworks(updated);
+
+    // Persist to Firestore
+    setSaving(true);
     try {
-      await Promise.all([
-        updateArtwork(a.id, { order: b.order }),
-        updateArtwork(b.id, { order: a.order }),
-      ]);
-      const updated = [...artworks];
-      updated[indexA] = { ...a, order: b.order };
-      updated[indexB] = { ...b, order: a.order };
-      updated.sort((x, y) => x.order - y.order);
-      setArtworks(updated);
+      const updates = updated
+        .filter((a, i) => a.order !== artworks.find((o) => o.id === a.id)?.order)
+        .map((a) => updateArtwork(a.id, { order: a.order }));
+      await Promise.all(updates);
     } catch {
-      alert('순서 변경에 실패했습니다.');
+      alert('순서 저장에 실패했습니다. 새로고침해주세요.');
+      loadArtworks();
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -112,7 +144,12 @@ export default function DashboardPage() {
 
       <main className="max-w-6xl mx-auto px-6 py-10">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="font-serif text-2xl">작품 관리</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="font-serif text-2xl">작품 관리</h1>
+            {saving && (
+              <span className="text-xs text-muted animate-pulse">저장 중...</span>
+            )}
+          </div>
           <Link
             href="/admin/upload"
             className="px-6 py-2.5 bg-text text-bg text-sm tracking-wider hover:opacity-90 transition-opacity"
@@ -120,6 +157,12 @@ export default function DashboardPage() {
             새 작품 등록
           </Link>
         </div>
+
+        {!fetching && artworks.length > 0 && (
+          <p className="text-xs text-muted mb-4">
+            드래그하여 작품 순서를 변경할 수 있습니다.
+          </p>
+        )}
 
         {fetching ? (
           <p className="text-muted text-center py-20">작품을 불러오는 중...</p>
@@ -134,62 +177,27 @@ export default function DashboardPage() {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
-            {artworks.map((artwork, idx) => (
-              <div
-                key={artwork.id}
-                className="border border-border p-2 space-y-2 hover:bg-card-hover transition-colors"
-              >
-                <div className="relative aspect-square bg-gray-100 overflow-hidden">
-                  <Image
-                    src={getDisplayImage(artwork)}
-                    alt={artwork.altText || artwork.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 33vw, (max-width: 768px) 25vw, 16vw"
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={artworks.map((a) => a.id)}
+              strategy={rectSortingStrategy}
+            >
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
+                {artworks.map((artwork) => (
+                  <SortableArtworkCard
+                    key={artwork.id}
+                    artwork={artwork}
+                    onDelete={handleDelete}
+                    deleting={deleting}
                   />
-                  <span className="absolute top-1 left-1 text-[10px] px-1 py-0.5 bg-black/50 text-white">
-                    {artwork.order}
-                  </span>
-                  <div className="absolute top-1 right-1 flex flex-col gap-0.5">
-                    <button
-                      onClick={() => handleSwapOrder(idx, idx - 1)}
-                      disabled={idx === 0}
-                      className="w-5 h-5 flex items-center justify-center bg-black/50 text-white text-[10px] hover:bg-black/80 disabled:opacity-30"
-                    >
-                      ▲
-                    </button>
-                    <button
-                      onClick={() => handleSwapOrder(idx, idx + 1)}
-                      disabled={idx === artworks.length - 1}
-                      className="w-5 h-5 flex items-center justify-center bg-black/50 text-white text-[10px] hover:bg-black/80 disabled:opacity-30"
-                    >
-                      ▼
-                    </button>
-                  </div>
-                </div>
-                <p className="text-xs truncate font-medium">{artwork.title}</p>
-                <p className="text-[10px] text-muted truncate">
-                  {artwork.category}{artwork.year && ` · ${artwork.year}`}
-                </p>
-                <div className="flex gap-1">
-                  <Link
-                    href={`/admin/edit/${artwork.id}`}
-                    className="flex-1 py-1 text-center text-[11px] border border-border hover:border-text transition-colors"
-                  >
-                    수정
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(artwork.id, artwork.title)}
-                    disabled={deleting === artwork.id}
-                    className="flex-1 py-1 text-[11px] border border-border text-red-500 hover:border-red-500 transition-colors disabled:opacity-50"
-                  >
-                    {deleting === artwork.id ? '...' : '삭제'}
-                  </button>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </SortableContext>
+          </DndContext>
         )}
 
         <p className="text-xs text-muted mt-8 text-center">
