@@ -87,7 +87,7 @@ export default function GalleryPage() {
                 className="fade-in-up"
                 style={{ animationDelay: `${Math.min(i * 50, 300)}ms` }}
               >
-                <ArtworkCard artwork={artwork} />
+                <ArtworkCard artwork={artwork} priority={i < 3} />
               </div>
             ))}
           </div>

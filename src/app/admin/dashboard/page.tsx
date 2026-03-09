@@ -213,6 +213,12 @@ export default function DashboardPage() {
             문의 관리
           </Link>
           <Link
+            href="/admin/guestbook"
+            className="px-5 py-2 text-xs border border-border hover:border-text transition-colors tracking-wider"
+          >
+            방명록 관리
+          </Link>
+          <Link
             href="/admin/logs"
             className="px-5 py-2 text-xs border border-border hover:border-text transition-colors tracking-wider"
           >

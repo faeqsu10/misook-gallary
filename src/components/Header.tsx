@@ -13,6 +13,7 @@ export default function Header() {
 
   const navItems = [
     { href: '/gallery', label: t.gallery },
+    { href: '/guestbook', label: t.guestbookTitle },
     { href: '/about', label: t.about },
     { href: '/contact', label: t.contact },
   ];
