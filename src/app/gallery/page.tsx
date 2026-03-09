@@ -6,6 +6,7 @@ import { useArtworks } from '@/lib/use-artworks';
 import ArtworkCard from '@/components/ArtworkCard';
 import FilterBar from '@/components/FilterBar';
 import { SkeletonGrid } from '@/components/Skeleton';
+import Slideshow from '@/components/Slideshow';
 import { useI18n } from '@/lib/i18n';
 
 export default function GalleryPage() {
@@ -15,6 +16,7 @@ export default function GalleryPage() {
   const [status, setStatus] = useState<StatusFilter>('all');
   const [search, setSearch] = useState('');
   const [visibleCount, setVisibleCount] = useState(12);
+  const [slideshowOpen, setSlideshowOpen] = useState(false);
 
   const filtered = artworks.filter((a) => {
     if (category !== 'all' && a.category !== category) return false;
@@ -37,7 +39,7 @@ export default function GalleryPage() {
           : t.galleryFiltered(filtered.length)}
       </p>
 
-      <div className="mb-6">
+      <div className="flex items-center gap-4 mb-6">
         <input
           type="text"
           value={search}
@@ -45,7 +47,22 @@ export default function GalleryPage() {
           placeholder={t.searchPlaceholder}
           className="w-full max-w-sm px-4 py-2.5 border border-border bg-transparent text-sm focus:outline-none focus:border-text transition-colors"
         />
+        {filtered.length > 0 && (
+          <button
+            onClick={() => setSlideshowOpen(true)}
+            className="shrink-0 px-4 py-2.5 border border-border text-sm text-muted hover:border-text hover:text-text transition-colors"
+          >
+            {t.slideshow}
+          </button>
+        )}
       </div>
+
+      {slideshowOpen && (
+        <Slideshow
+          artworks={filtered}
+          onClose={() => setSlideshowOpen(false)}
+        />
+      )}
 
       <FilterBar
         category={category}

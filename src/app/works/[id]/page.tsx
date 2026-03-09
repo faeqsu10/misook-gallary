@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 import { useArtwork } from '@/lib/use-artworks';
 import { getDisplayImage, getDisplayLabel } from '@/lib/types';
 import ArtworkViewer from '@/components/ArtworkViewer';
+import ShareButton from '@/components/ShareButton';
 import { SITE_URL } from '@/lib/constants';
 import { artist } from '@/data/artist';
 import { useI18n } from '@/lib/i18n';
@@ -99,10 +100,16 @@ export default function WorkDetailPage() {
             {artwork.title}
           </h1>
           {artwork.titleEn && (
-            <p className="text-sm text-muted mb-6">
+            <p className="text-sm text-muted mb-4">
               {artwork.titleEn}
             </p>
           )}
+          <div className="mb-6">
+            <ShareButton
+              title={artwork.title}
+              url={`${SITE_URL}/works/${artwork.id}`}
+            />
+          </div>
 
           <div className="space-y-3 text-sm border-t border-border pt-6">
             {artwork.year && (
