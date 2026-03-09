@@ -19,8 +19,8 @@ export default function FilterBar({
   const { t } = useI18n();
 
   return (
-    <div className="flex flex-wrap gap-6 mb-10">
-      <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-wrap gap-6 mb-10" role="search" aria-label="작품 필터">
+      <div className="flex flex-wrap items-center gap-2" role="group" aria-label={t.filterCategory}>
         <span className="text-xs text-muted shrink-0">{t.filterCategory}</span>
         {(Object.keys(t.categoryLabels) as CategoryFilter[]).map((key) => (
           <button
@@ -37,7 +37,7 @@ export default function FilterBar({
           </button>
         ))}
       </div>
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2" role="group" aria-label={t.filterStatus}>
         <span className="text-xs text-muted shrink-0">{t.filterStatus}</span>
         {(Object.keys(t.statusLabels) as StatusFilter[]).map((key) => (
           <button

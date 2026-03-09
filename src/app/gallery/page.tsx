@@ -45,6 +45,7 @@ export default function GalleryPage() {
           value={search}
           onChange={(e) => { setSearch(e.target.value); setVisibleCount(12); }}
           placeholder={t.searchPlaceholder}
+          aria-label={t.searchPlaceholder}
           className="w-full max-w-sm px-4 py-2.5 border border-border bg-transparent text-sm focus:outline-none focus:border-text transition-colors"
         />
         {filtered.length > 0 && (

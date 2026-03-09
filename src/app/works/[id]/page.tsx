@@ -5,7 +5,9 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useArtwork } from '@/lib/use-artworks';
 import { getDisplayImage, getDisplayLabel } from '@/lib/types';
+import { useState } from 'react';
 import ArtworkViewer from '@/components/ArtworkViewer';
+import ImageCompare from '@/components/ImageCompare';
 import ShareButton from '@/components/ShareButton';
 import { SITE_URL } from '@/lib/constants';
 import { artist } from '@/data/artist';
@@ -16,6 +18,7 @@ export default function WorkDetailPage() {
   const id = params.id as string;
   const { artwork, prev, next, loading } = useArtwork(id);
   const { t } = useI18n();
+  const [compareMode, setCompareMode] = useState(false);
 
 
   if (loading) {
@@ -85,13 +88,33 @@ export default function WorkDetailPage() {
       <div className="grid md:grid-cols-[1fr_380px] gap-12 md:gap-16">
         {/* Image */}
         <div className="fade-in">
-          <ArtworkViewer
-            src={getDisplayImage(artwork)}
-            alt={artwork.title}
-          />
-          {getDisplayLabel(artwork) && (
-            <p className="text-xs text-muted mt-2 text-center">{getDisplayLabel(artwork)}</p>
+          {compareMode && artwork.enhancements ? (
+            <ImageCompare
+              originalSrc={artwork.image}
+              enhancedSrc={getDisplayImage(artwork)}
+              alt={artwork.title}
+              originalLabel={t.originalLabel}
+              enhancedLabel={t.enhancedLabel}
+            />
+          ) : (
+            <ArtworkViewer
+              src={getDisplayImage(artwork)}
+              alt={artwork.title}
+            />
           )}
+          <div className="flex items-center justify-center gap-4 mt-2">
+            {getDisplayLabel(artwork) && (
+              <p className="text-xs text-muted">{getDisplayLabel(artwork)}</p>
+            )}
+            {artwork.enhancements && (artwork.enhancements.corrected || artwork.enhancements.artEnhanced) && (
+              <button
+                onClick={() => setCompareMode((v) => !v)}
+                className="text-xs text-muted hover:text-text transition-colors underline underline-offset-4"
+              >
+                {compareMode ? t.normalView : t.compareView}
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Info */}
