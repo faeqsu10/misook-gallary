@@ -42,7 +42,9 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, message, honeypot } = body;
+    const { honeypot } = body;
+    const name = String(body.name ?? '').trim();
+    const message = String(body.message ?? '').trim();
 
     if (honeypot) {
       return NextResponse.json({ success: true });
