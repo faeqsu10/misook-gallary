@@ -133,7 +133,39 @@
 | 갤러리 이미지 priority 최적화 (첫 3장) | ✅ | - | 2026-03-09 |
 | Pretendard 폰트 self-host (next/font/local) | ✅ | - | 2026-03-09 |
 
+## Phase 11: 보안 강화
+| 항목 | 상태 | 커밋 | 날짜 |
+|------|------|------|------|
+| Gemini API 키 헤더 방식 전환 (x-goog-api-key) | ✅ | a4333d9 | 2026-03-10 |
+| Enhance API mimeType 화이트리스트 검증 | ✅ | a4333d9 | 2026-03-10 |
+| 미들웨어 matcher 누락 라우트 추가 | ✅ | a4333d9 | 2026-03-10 |
+| IP 주소 Firestore doc ID 새니타이징 | ✅ | a4333d9 | 2026-03-10 |
+| Rate limit 유틸리티 추출 + Enhance API rate limiting | ✅ | - | 2026-03-10 |
+
+## Phase 12: 코드 품질 + 성능
+| 항목 | 상태 | 커밋 | 날짜 |
+|------|------|------|------|
+| use-artworks next 아트워크 버그 수정 | ✅ | a4333d9 | 2026-03-10 |
+| ArtworksProvider useMemo 최적화 | ✅ | a4333d9 | 2026-03-10 |
+| 정적 데이터 즉시 렌더 (loading 초기값 변경) | ✅ | a4333d9 | 2026-03-10 |
+| Admin 대시보드 stale closure 수정 | ✅ | a4333d9 | 2026-03-10 |
+| 페이지별 SEO 메타데이터 (gallery, about) | ✅ | a4333d9 | 2026-03-10 |
+| 이미지 sitemap 확장 | ✅ | a4333d9 | 2026-03-10 |
+
+## Phase 13: UX 고도화
+| 항목 | 상태 | 커밋 | 날짜 |
+|------|------|------|------|
+| ArtworkCard 이미지 shimmer 로딩 + fade-in | ✅ | 405435d | 2026-03-10 |
+| 프린트 스타일시트 (컬렉터/큐레이터용) | ✅ | 405435d | 2026-03-10 |
+| 하드코딩 한국어 인용구 i18n 이동 | ✅ | 405435d | 2026-03-10 |
+| Rate limit / getClientIp 중복 코드 추출 | ✅ | - | 2026-03-10 |
+
 ## 향후 계획
 | 항목 | 우선순위 | 비고 |
 |------|----------|------|
-| - | - | Phase 10 완료 |
+| 세션 쿠키 HttpOnly/Secure (서버사이드) | 높음 | 보안 강화 |
+| Firestore 규칙 admin custom claim | 높음 | 보안 강화 |
+| 작품 시리즈(series) 필드 + 큐레이토리얼 그룹핑 | 중 | 갤러리 격상 |
+| i18n 서버 호환 리팩토링 → SSR/SSG 활성화 | 중 | 근본적 성능 개선 |
+| Firebase SDK lazy loading | 낮음 | 번들 사이즈 절감 |
+| View Transitions API | 낮음 | 작품 전환 애니메이션 |

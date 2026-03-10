@@ -1,19 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
 import { FieldValue } from 'firebase-admin/firestore';
+import { checkRateLimit, recordRateLimit } from '@/lib/rate-limit';
 
 const NAME_MAX = 50;
 const MESSAGE_MAX = 200;
 const RATE_LIMIT_MINUTES = 10;
-
-function getClientIp(request: NextRequest): string {
-  const ip = (
-    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-    request.headers.get('x-real-ip') ||
-    'unknown'
-  );
-  return ip.replace(/[^a-zA-Z0-9.:_-]/g, '_').slice(0, 128);
-}
 
 // GET: fetch approved entries
 export async function GET() {
@@ -64,23 +56,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Rate limiting
-    const clientIp = getClientIp(request);
-    const rateLimitRef = adminDb.collection('rate_limits').doc(`guestbook_${clientIp}`);
-    const rateLimitDoc = await rateLimitRef.get();
-
-    if (rateLimitDoc.exists) {
-      const lastSubmit = rateLimitDoc.data()?.lastSubmit?.toDate();
-      if (lastSubmit) {
-        const elapsed = Date.now() - lastSubmit.getTime();
-        const limitMs = RATE_LIMIT_MINUTES * 60 * 1000;
-        if (elapsed < limitMs) {
-          const remaining = Math.ceil((limitMs - elapsed) / 60000);
-          return NextResponse.json(
-            { error: `잠시 후 다시 시도해주세요. (${remaining}분 후)` },
-            { status: 429 }
-          );
-        }
-      }
+    const { limited, remainingMinutes } = await checkRateLimit(request, 'guestbook', RATE_LIMIT_MINUTES);
+    if (limited) {
+      return NextResponse.json(
+        { error: `잠시 후 다시 시도해주세요. (${remainingMinutes}분 후)` },
+        { status: 429 }
+      );
     }
 
     await adminDb.collection('guestbook').add({
@@ -90,10 +71,7 @@ export async function POST(request: NextRequest) {
       createdAt: FieldValue.serverTimestamp(),
     });
 
-    await rateLimitRef.set({
-      lastSubmit: FieldValue.serverTimestamp(),
-      ip: clientIp,
-    });
+    await recordRateLimit(request, 'guestbook');
 
     return NextResponse.json({ success: true });
   } catch (err) {

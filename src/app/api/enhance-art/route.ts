@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminAuth } from '@/lib/firebase-admin';
+import { checkRateLimit, recordRateLimit } from '@/lib/rate-limit';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_ART_MODEL || process.env.GEMINI_MODEL || 'gemini-3-pro-image-preview';
@@ -30,6 +31,11 @@ export async function POST(request: NextRequest) {
       { error: 'GEMINI_API_KEY가 설정되지 않았습니다.' },
       { status: 500 }
     );
+  }
+
+  const { limited } = await checkRateLimit(request, 'enhance', 2);
+  if (limited) {
+    return NextResponse.json({ error: '잠시 후 다시 시도해주세요.' }, { status: 429 });
   }
 
   try {
@@ -98,6 +104,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    await recordRateLimit(request, 'enhance');
     return NextResponse.json({
       imageBase64: imagePart.inlineData.data,
       mimeType: imagePart.inlineData.mimeType || 'image/jpeg',
