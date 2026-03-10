@@ -12,8 +12,7 @@ export default function AboutPage() {
       {/* Hero Quote */}
       <div className="mb-20 py-12 text-center fade-in-up">
         <p className="font-serif text-2xl md:text-3xl lg:text-4xl leading-snug tracking-tight text-text/90 italic break-keep">
-          &ldquo;나의 그림은<br className="hidden md:inline" /> 직선과 곡선,{' '}
-          형태와 색의 대화입니다.&rdquo;
+          &ldquo;{t.aboutQuote}&rdquo;
         </p>
         <p className="mt-6 text-xs text-muted tracking-widest uppercase">
           {artist.name} &mdash; {t.fromWorkNote}

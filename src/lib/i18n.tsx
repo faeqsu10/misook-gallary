@@ -73,6 +73,8 @@ const translations = {
     timeline: '연보',
     aboutCta: '작품에 대해 궁금하신 점이 있으시면',
     aboutInquiry: '문의하기',
+    homeQuote: '구조 안에서 자유를 찾고, 질서 위에 감정을 놓습니다.',
+    aboutQuote: '다시 그리기로 했습니다.',
     // Contact page
     contactPageDesc: '작품이 마음에 닿았다면 조용히 문의를 남겨주세요.',
     contactPageDetail: '작품 구매, 전시, 혹은 따뜻한 응원 — 모든 메시지를 소중히 읽겠습니다.',
@@ -161,6 +163,8 @@ const translations = {
     timeline: 'Timeline',
     aboutCta: 'If you have questions about the works',
     aboutInquiry: 'Contact',
+    homeQuote: 'Finding freedom within structure, placing emotion upon order.',
+    aboutQuote: 'I decided to draw again.',
     contactPageDesc: 'If an artwork speaks to you, feel free to leave an inquiry.',
     contactPageDetail: 'Purchase, exhibition, or a warm message of support — every message is read with care.',
     filterCategory: 'Category',

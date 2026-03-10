@@ -29,6 +29,7 @@ export interface Artwork {
   };
   displayVersion?: DisplayVersion;
   featured?: boolean;
+  blurDataURL?: string;
   order: number;
 }
 

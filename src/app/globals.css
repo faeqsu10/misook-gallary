@@ -93,3 +93,31 @@ body {
 img {
   transition: opacity 0.3s ease;
 }
+
+/* Print stylesheet - clean artwork view for collectors/curators */
+@media print {
+  header, footer, nav,
+  .skip-to-content,
+  button, .slideshow-overlay {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    break-inside: avoid;
+  }
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+  @page {
+    margin: 2cm;
+  }
+}

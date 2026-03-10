@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Artwork, getDisplayImage } from '@/lib/types';
@@ -7,20 +8,22 @@ import { useI18n } from '@/lib/i18n';
 
 export default function ArtworkCard({ artwork, priority = false }: { artwork: Artwork; priority?: boolean }) {
   const { t } = useI18n();
+  const [loaded, setLoaded] = useState(false);
 
   return (
-    <Link
-      href={`/works/${artwork.id}`}
-      className="group block"
-    >
+    <Link href={`/works/${artwork.id}`} className="group block">
       <div className="relative aspect-[3/4] overflow-hidden bg-border">
+        {!loaded && (
+          <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/20 to-transparent bg-[length:200%_100%]" />
+        )}
         <Image
           src={getDisplayImage(artwork)}
           alt={artwork.altText || artwork.title}
           fill
           sizes="(max-width: 768px) 50vw, 33vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className={`object-cover transition-all duration-500 group-hover:scale-105 ${loaded ? 'opacity-100' : 'opacity-0'}`}
           priority={priority}
+          onLoad={() => setLoaded(true)}
         />
       </div>
       <div className="mt-3 space-y-1">

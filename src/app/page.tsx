@@ -109,9 +109,7 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-6 py-16 border-t border-border">
         <div className="max-w-2xl mx-auto text-center">
           <blockquote className="font-serif text-lg md:text-xl leading-relaxed text-muted italic">
-            &ldquo;구조 안에서 자유를 찾고,
-            <br />
-            질서 위에 감정을 놓습니다.&rdquo;
+            &ldquo;{t.homeQuote}&rdquo;
           </blockquote>
           <Link
             href="/about"
