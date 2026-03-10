@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { limited } = await checkRateLimit(request, 'enhance', 2);
+  const { limited } = await checkRateLimit(request, 'enhance-art', 2);
   if (limited) {
     return NextResponse.json({ error: '잠시 후 다시 시도해주세요.' }, { status: 429 });
   }
@@ -44,6 +44,10 @@ export async function POST(request: NextRequest) {
     const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
     if (!imageBase64 || !mimeType || !ALLOWED_MIME_TYPES.includes(mimeType)) {
       return NextResponse.json({ error: '올바른 이미지 데이터가 필요합니다.' }, { status: 400 });
+    }
+
+    if (imageBase64.length > 15_000_000) {
+      return NextResponse.json({ error: '이미지가 너무 큽니다. (10MB 이하)' }, { status: 413 });
     }
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent`;

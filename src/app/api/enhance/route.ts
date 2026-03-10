@@ -43,6 +43,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: '올바른 이미지 데이터가 필요합니다.' }, { status: 400 });
     }
 
+    if (imageBase64.length > 15_000_000) {
+      return NextResponse.json({ error: '이미지가 너무 큽니다. (10MB 이하)' }, { status: 413 });
+    }
+
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent`;
 
     const body = {

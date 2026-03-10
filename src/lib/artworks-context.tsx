@@ -19,7 +19,8 @@ const ArtworksContext = createContext<ArtworksContextType>({
 
 export function ArtworksProvider({ children }: { children: ReactNode }) {
   const [artworks, setArtworks] = useState<Artwork[]>(staticArtworks);
-  const [loading, setLoading] = useState(false);
+  // Static data available immediately; Firestore silently upgrades in background
+  const [loading] = useState(false);
 
   useEffect(() => {
     fetchArtworks()
