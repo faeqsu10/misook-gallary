@@ -18,8 +18,12 @@ export default function AdminLoginPage() {
   useEffect(() => {
     if (user && !loading) {
       // 기존 세션이 있으면 쿠키 설정 후 리다이렉트
-      user.getIdToken().then((token) => {
-        document.cookie = `__session=${token}; path=/; max-age=3600; SameSite=Strict`;
+      user.getIdToken().then(async (token) => {
+        await fetch('/api/auth/session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken: token }),
+        });
         router.push('/admin/dashboard');
       });
     }
@@ -41,7 +45,11 @@ export default function AdminLoginPage() {
       const result = await signInWithEmailAndPassword(auth, email, password);
       // Set session cookie for middleware
       const token = await result.user.getIdToken();
-      document.cookie = `__session=${token}; path=/; max-age=3600; SameSite=Strict`;
+      await fetch('/api/auth/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken: token }),
+      });
       router.push('/admin/dashboard');
     } catch {
       setError('이메일 또는 비밀번호가 올바르지 않습니다.');

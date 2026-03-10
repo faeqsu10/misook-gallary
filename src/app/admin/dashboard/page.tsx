@@ -110,8 +110,8 @@ export default function DashboardPage() {
   }
 
   async function handleLogout() {
-    await signOut(auth);
-    document.cookie = '__session=; path=/; max-age=0';
+    try { await signOut(auth); } catch { /* proceed anyway */ }
+    await fetch('/api/auth/session', { method: 'DELETE' });
     router.push('/admin');
   }
 
