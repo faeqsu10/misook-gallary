@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Noto_Serif_KR } from 'next/font/google';
 import localFont from 'next/font/local';
 import Script from 'next/script';
 import './globals.css';
@@ -12,13 +11,6 @@ import { SITE_URL } from '@/lib/constants';
 import { artist } from '@/data/artist';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-
-const notoSerifKR = Noto_Serif_KR({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-noto-serif-kr',
-  display: 'swap',
-});
 
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
@@ -53,7 +45,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko" className={`${notoSerifKR.variable} ${pretendard.variable}`}>
+    <html lang="ko" className={pretendard.variable}>
       <head>
         <script
           type="application/ld+json"
