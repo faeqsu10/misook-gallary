@@ -160,12 +160,19 @@
 | 하드코딩 한국어 인용구 i18n 이동 | ✅ | 405435d | 2026-03-10 |
 | Rate limit / getClientIp 중복 코드 추출 | ✅ | - | 2026-03-10 |
 
+## Phase 14: 보안 심화 + 아키텍처
+| 항목 | 상태 | 커밋 | 날짜 |
+|------|------|------|------|
+| 세션 쿠키 HttpOnly/Secure (서버사이드 API) | ✅ | d2cbc90 | 2026-03-10 |
+| Firestore 규칙 admin custom claim (isAdmin) | ✅ | d2cbc90 | 2026-03-10 |
+| Admin claim 설정 스크립트 (set-admin-claim.mjs) | ✅ | d2cbc90 | 2026-03-10 |
+| 작품 시리즈 필드 + 갤러리 시리즈 필터 | ✅ | e54c444 | 2026-03-10 |
+| Firebase SDK lazy loading (동적 import) | ✅ | e54c444 | 2026-03-10 |
+| View Transitions API (페이지/작품 전환 애니메이션) | ✅ | - | 2026-03-10 |
+
 ## 향후 계획
 | 항목 | 우선순위 | 비고 |
 |------|----------|------|
-| 세션 쿠키 HttpOnly/Secure (서버사이드) | 높음 | 보안 강화 |
-| Firestore 규칙 admin custom claim | 높음 | 보안 강화 |
-| 작품 시리즈(series) 필드 + 큐레이토리얼 그룹핑 | 중 | 갤러리 격상 |
-| i18n 서버 호환 리팩토링 → SSR/SSG 활성화 | 중 | 근본적 성능 개선 |
-| Firebase SDK lazy loading | 낮음 | 번들 사이즈 절감 |
-| View Transitions API | 낮음 | 작품 전환 애니메이션 |
+| i18n 서버 호환 리팩토링 → SSR/SSG 활성화 | 중 | 대규모 아키텍처 변경, 별도 세션 권장 |
+| Noto Serif KR self-host | 낮음 | Google Fonts 외부 의존성 제거 |
+| CSP (Content-Security-Policy) 헤더 | 낮음 | XSS 방어 강화 |

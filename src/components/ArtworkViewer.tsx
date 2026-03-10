@@ -7,9 +7,11 @@ import { createPortal } from 'react-dom';
 export default function ArtworkViewer({
   src,
   alt,
+  artworkId,
 }: {
   src: string;
   alt: string;
+  artworkId?: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -99,6 +101,7 @@ export default function ArtworkViewer({
           fill
           sizes="(max-width: 768px) 100vw, 60vw"
           className="object-contain"
+          style={artworkId ? { viewTransitionName: `artwork-${artworkId}` } : undefined}
           priority
         />
       </div>

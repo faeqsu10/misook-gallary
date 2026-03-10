@@ -22,6 +22,7 @@ export default function ArtworkCard({ artwork, priority = false }: { artwork: Ar
           fill
           sizes="(max-width: 768px) 50vw, 33vw"
           className={`object-cover transition-all duration-500 group-hover:scale-105 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+          style={{ viewTransitionName: `artwork-${artwork.id}` }}
           priority={priority}
           onLoad={() => setLoaded(true)}
         />

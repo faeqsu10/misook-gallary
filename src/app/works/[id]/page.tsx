@@ -100,6 +100,7 @@ export default function WorkDetailPage() {
             <ArtworkViewer
               src={getDisplayImage(artwork)}
               alt={artwork.title}
+              artworkId={id}
             />
           )}
           <div className="flex items-center justify-center gap-4 mt-2">
