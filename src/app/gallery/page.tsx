@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CategoryFilter, StatusFilter } from '@/lib/types';
+import { CategoryFilter, StatusFilter, SeriesFilter } from '@/lib/types';
 import { useArtworks } from '@/lib/use-artworks';
 import ArtworkCard from '@/components/ArtworkCard';
 import FilterBar from '@/components/FilterBar';
@@ -14,13 +14,17 @@ export default function GalleryPage() {
   const { t } = useI18n();
   const [category, setCategory] = useState<CategoryFilter>('all');
   const [status, setStatus] = useState<StatusFilter>('all');
+  const [series, setSeries] = useState<SeriesFilter>('all');
   const [search, setSearch] = useState('');
   const [visibleCount, setVisibleCount] = useState(12);
   const [slideshowOpen, setSlideshowOpen] = useState(false);
 
+  const availableSeries = [...new Set(artworks.map((a) => a.series).filter(Boolean))] as string[];
+
   const filtered = artworks.filter((a) => {
     if (category !== 'all' && a.category !== category) return false;
     if (status !== 'all' && a.status !== status) return false;
+    if (series !== 'all' && a.series !== series) return false;
     if (search) {
       const q = search.toLowerCase();
       const matchTitle = a.title.toLowerCase().includes(q);
@@ -34,7 +38,7 @@ export default function GalleryPage() {
     <section className="max-w-6xl mx-auto px-6 py-16">
       <h1 className="font-serif text-2xl md:text-3xl mb-2">{t.galleryTitle}</h1>
       <p className="text-sm text-muted mb-10">
-        {category === 'all' && status === 'all'
+        {category === 'all' && status === 'all' && series === 'all'
           ? t.galleryCount(artworks.length)
           : t.galleryFiltered(filtered.length)}
       </p>
@@ -68,8 +72,11 @@ export default function GalleryPage() {
       <FilterBar
         category={category}
         status={status}
+        series={series}
         onCategoryChange={(v) => { setCategory(v); setVisibleCount(12); }}
         onStatusChange={(v) => { setStatus(v); setVisibleCount(12); }}
+        onSeriesChange={(v) => { setSeries(v); setVisibleCount(12); }}
+        availableSeries={availableSeries}
       />
 
       {loading ? (

@@ -30,6 +30,7 @@ export interface Artwork {
   displayVersion?: DisplayVersion;
   featured?: boolean;
   blurDataURL?: string;
+  series?: string;
   order: number;
 }
 
@@ -71,6 +72,7 @@ export interface Artist {
 
 export type CategoryFilter = 'all' | Artwork['category'];
 export type StatusFilter = 'all' | Artwork['status'];
+export type SeriesFilter = 'all' | string;
 
 export const INQUIRY_TYPE_LABELS = {
   purchase: '작품 구매 문의',

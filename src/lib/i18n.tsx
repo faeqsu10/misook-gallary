@@ -81,6 +81,8 @@ const translations = {
     // Filter labels
     filterCategory: '분류',
     filterStatus: '상태',
+    filterSeries: '시리즈',
+    allSeries: '전체',
     // Error messages
     rateLimitError: (n: number) => `잠시 후 다시 시도해주세요. (약 ${n}분 후)`,
     nameTooLong: '이름은 100자 이하로 입력해주세요.',
@@ -99,6 +101,7 @@ const translations = {
     // Centralized label maps
     categoryLabels: { all: '전체', portrait: '인물', abstract: '추상', drawing: '드로잉' } as Record<string, string>,
     statusLabels: { all: '전체', collection: '소장용', exhibit: '전시 가능', inquiry: '문의 가능' } as Record<string, string>,
+    seriesLabels: { all: '전체', spiritual: '영적 세계', geometry: '기하와 질서', figure: '인물', color: '색채 탐구' } as Record<string, string>,
     // Footer
     footerRights: '모든 작품의 저작권은 작가에게 있습니다.',
   },
@@ -169,6 +172,8 @@ const translations = {
     contactPageDetail: 'Purchase, exhibition, or a warm message of support — every message is read with care.',
     filterCategory: 'Category',
     filterStatus: 'Status',
+    filterSeries: 'Series',
+    allSeries: 'All',
     rateLimitError: (n: number) => `Please try again later. (in about ${n} min)`,
     nameTooLong: 'Name must be 100 characters or less.',
     messageTooLong: 'Message must be 5000 characters or less.',
@@ -184,6 +189,7 @@ const translations = {
     guestbookError: 'Failed to send. Please try again later.',
     categoryLabels: { all: 'All', portrait: 'Portrait', abstract: 'Abstract', drawing: 'Drawing' } as Record<string, string>,
     statusLabels: { all: 'All', collection: 'Collection', exhibit: 'Available for Exhibition', inquiry: 'Inquiries Welcome' } as Record<string, string>,
+    seriesLabels: { all: 'All', spiritual: 'Spiritual', geometry: 'Geometry & Order', figure: 'Figures', color: 'Color Study' } as Record<string, string>,
     footerRights: 'All artworks are copyrighted by the artist.',
   },
 } as const;

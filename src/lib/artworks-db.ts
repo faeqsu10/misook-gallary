@@ -1,35 +1,36 @@
 'use client';
 
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  where,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  orderBy,
-} from 'firebase/firestore';
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  deleteObject,
-} from 'firebase/storage';
-import { db, storage } from './firebase';
 import { Artwork } from './types';
 
 const COLLECTION = 'artworks';
 
+async function getFirestoreDb() {
+  const { db } = await import('./firebase');
+  return db;
+}
+
+async function getFirestore() {
+  return await import('firebase/firestore');
+}
+
+async function getStorage() {
+  const { storage } = await import('./firebase');
+  const firebaseStorage = await import('firebase/storage');
+  return { storage, ...firebaseStorage };
+}
+
 export async function fetchArtworks(): Promise<Artwork[]> {
+  const db = await getFirestoreDb();
+  const { collection, getDocs, orderBy, query } = await getFirestore();
   const q = query(collection(db, COLLECTION), orderBy('order', 'asc'));
   const snapshot = await getDocs(q);
   return snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Artwork));
 }
 
 export async function fetchArtwork(id: string): Promise<Artwork | null> {
+  const db = await getFirestoreDb();
+  const { collection, doc, getDoc, getDocs, where, query } = await getFirestore();
+
   // 1) Try direct document lookup by Firestore doc ID
   const docSnap = await getDoc(doc(db, COLLECTION, id));
   if (docSnap.exists()) {
@@ -49,6 +50,7 @@ export async function fetchArtwork(id: string): Promise<Artwork | null> {
 }
 
 export async function uploadImage(file: File, filename: string): Promise<string> {
+  const { storage, ref, uploadBytes, getDownloadURL } = await getStorage();
   const storageRef = ref(storage, `artworks/${filename}`);
   await uploadBytes(storageRef, file);
   return getDownloadURL(storageRef);
@@ -59,6 +61,7 @@ export async function uploadEnhancedImage(
   filename: string,
   tier: 'corrected' | 'artEnhanced' = 'corrected'
 ): Promise<string> {
+  const { storage, ref, uploadBytes, getDownloadURL } = await getStorage();
   const storageTier = tier === 'artEnhanced' ? 'art-enhanced' : 'corrected';
   const storageRef = ref(storage, `enhanced/${storageTier}/${filename}`);
   await uploadBytes(storageRef, blob);
@@ -67,6 +70,7 @@ export async function uploadEnhancedImage(
 
 export async function deleteImage(imageUrl: string): Promise<void> {
   try {
+    const { storage, ref, deleteObject } = await getStorage();
     const storageRef = ref(storage, imageUrl);
     await deleteObject(storageRef);
   } catch {
@@ -77,6 +81,8 @@ export async function deleteImage(imageUrl: string): Promise<void> {
 export async function createArtwork(
   data: Omit<Artwork, 'id'> & { id: string }
 ): Promise<string> {
+  const db = await getFirestoreDb();
+  const { collection, addDoc } = await getFirestore();
   const docRef = await addDoc(collection(db, COLLECTION), data);
   return docRef.id;
 }
@@ -85,6 +91,9 @@ export async function updateArtwork(
   docId: string,
   data: Partial<Artwork>
 ): Promise<void> {
+  const db = await getFirestoreDb();
+  const { collection, doc, getDoc, getDocs, where, query, updateDoc } = await getFirestore();
+
   // 1) Try direct document lookup by Firestore doc ID
   const docSnap = await getDoc(doc(db, COLLECTION, docId));
   if (docSnap.exists()) {
@@ -104,6 +113,9 @@ export async function updateArtwork(
 }
 
 export async function deleteArtwork(artworkId: string): Promise<void> {
+  const db = await getFirestoreDb();
+  const { collection, doc, getDoc, getDocs, where, query, deleteDoc } = await getFirestore();
+
   let foundId: string | null = null;
   let foundData: Record<string, unknown> | null = null;
 
