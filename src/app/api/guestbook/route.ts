@@ -7,11 +7,12 @@ const MESSAGE_MAX = 200;
 const RATE_LIMIT_MINUTES = 10;
 
 function getClientIp(request: NextRequest): string {
-  return (
+  const ip = (
     request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
     request.headers.get('x-real-ip') ||
     'unknown'
   );
+  return ip.replace(/[^a-zA-Z0-9.:_-]/g, '_').slice(0, 128);
 }
 
 // GET: fetch approved entries

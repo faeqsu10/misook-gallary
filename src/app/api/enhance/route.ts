@@ -32,14 +32,12 @@ export async function POST(request: NextRequest) {
   try {
     const { imageBase64, mimeType } = await request.json();
 
-    if (!imageBase64 || !mimeType) {
-      return NextResponse.json(
-        { error: '이미지 데이터가 필요합니다.' },
-        { status: 400 }
-      );
+    const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!imageBase64 || !mimeType || !ALLOWED_MIME_TYPES.includes(mimeType)) {
+      return NextResponse.json({ error: '올바른 이미지 데이터가 필요합니다.' }, { status: 400 });
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(GEMINI_MODEL)}:generateContent`;
 
     const body = {
       contents: [
@@ -62,7 +60,7 @@ export async function POST(request: NextRequest) {
 
     const response = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': GEMINI_API_KEY },
       body: JSON.stringify(body),
     });
 

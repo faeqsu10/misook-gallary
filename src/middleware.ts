@@ -16,5 +16,7 @@ export const config = {
     '/admin/seed',
     '/admin/inquiries',
     '/admin/enhance',
+    '/admin/guestbook',
+    '/admin/logs',
   ],
 };

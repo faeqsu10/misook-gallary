@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useMemo, ReactNode } from 'react';
 import { Artwork } from './types';
 import { fetchArtworks } from './artworks-db';
 import { artworks as staticArtworks } from '@/data/artworks';
@@ -19,7 +19,7 @@ const ArtworksContext = createContext<ArtworksContextType>({
 
 export function ArtworksProvider({ children }: { children: ReactNode }) {
   const [artworks, setArtworks] = useState<Artwork[]>(staticArtworks);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchArtworks()
@@ -28,14 +28,15 @@ export function ArtworksProvider({ children }: { children: ReactNode }) {
       })
       .catch(() => {
         // Firestore unavailable, keep static data
-      })
-      .finally(() => setLoading(false));
+      });
   }, []);
 
-  const featured = artworks.filter((a) => a.featured);
+  const featured = useMemo(() => artworks.filter((a) => a.featured), [artworks]);
+
+  const value = useMemo(() => ({ artworks, featured, loading }), [artworks, featured, loading]);
 
   return (
-    <ArtworksContext.Provider value={{ artworks, featured, loading }}>
+    <ArtworksContext.Provider value={value}>
       {children}
     </ArtworksContext.Provider>
   );

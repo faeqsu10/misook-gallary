@@ -90,6 +90,7 @@ export default function DashboardPage() {
     reordered.splice(newIndex, 0, moved);
 
     // Assign new order values
+    const oldArtworks = [...artworks];
     const updated = reordered.map((a, i) => ({ ...a, order: i + 1 }));
     setArtworks(updated);
 
@@ -97,7 +98,7 @@ export default function DashboardPage() {
     setSaving(true);
     try {
       const updates = updated
-        .filter((a, i) => a.order !== artworks.find((o) => o.id === a.id)?.order)
+        .filter((a) => a.order !== oldArtworks.find((o) => o.id === a.id)?.order)
         .map((a) => updateArtwork(a.id, { order: a.order }));
       await Promise.all(updates);
     } catch {

@@ -13,16 +13,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const snapshot = await adminDb
       .collection('artworks')
       .where('visibility', 'in', ['public', 'link'])
-      .select('updatedAt')
+      .select('updatedAt', 'image')
       .get();
 
     workPages = snapshot.docs.map((doc) => {
       const data = doc.data();
       const lastModified = data.updatedAt?.toDate() || now;
+      const imageUrl: string | undefined = data.image
+        ? data.image.startsWith('http')
+          ? data.image
+          : `${BASE_URL}${data.image}`
+        : undefined;
       return {
         url: `${BASE_URL}/works/${doc.id}`,
         lastModified,
         priority: 0.7 as const,
+        ...(imageUrl && { images: [imageUrl] }),
       };
     });
   } catch {
